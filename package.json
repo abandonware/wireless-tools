@@ -1,0 +1,30 @@
+{
+  "name": "wireless-tools",
+  "version": "0.0.0",
+  "description": "Wireless tools for Node.js",
+  "main": "wireless-tools.js",
+  "scripts": {
+    "test": "istanbul cover --report html node_modules/.bin/_mocha",
+    "coveralls": "istanbul cover --report lcovonly node_modules/.bin/_mocha && cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bakerface/wireless-tools.git"
+  },
+  "keywords": [
+    "wireless",
+    "tools"
+  ],
+  "author": "Christopher M. Baker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bakerface/wireless-tools/issues"
+  },
+  "homepage": "https://github.com/bakerface/wireless-tools",
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.11",
+    "mocha": "^2.2.1",
+    "should": "^5.2.0"
+  }
+}
