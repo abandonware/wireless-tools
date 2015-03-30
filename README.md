@@ -1,5 +1,5 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.6.1-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.7.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 
@@ -14,6 +14,32 @@
 - [iwconfig](#iwconfig) - configure wireless network interfaces
   - [iwconfig.status(callback)](#iwconfigstatuscallback) - status of all wireless network interfaces
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
+- [udhcpd](#udhcpd) - configure a dhcp server
+  - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
+
+# hostapd
+The **hostapd** command is used to configure wireless access points.
+
+## hostapd.enable(options, callback)
+The **hostapd enable** command is used to host an access point on a specific wireless interface.
+
+``` javascript
+var hostapd = require('wireless-tools/hostapd');
+
+var options = {
+  channel: 6,
+  driver: 'rtl871xdrv',
+  hw_mode: 'g',
+  interface: 'wlan0',
+  ssid: 'RaspberryPi',
+  wpa: 2,
+  wpa_passphrase: 'raspberry'
+};
+
+hostapd.enable(options, function(err) {
+  // the access point was created
+});
+```
 
 # ifconfig
 The **ifconfig** command is used to configure network interfaces.
@@ -184,26 +210,27 @@ iwconfig.status('wlan0', function(err, status) {
 }
 ```
 
-# hostapd
-The **hostapd** command is used to configure wireless access points.
+# udhcpd
+The **udhcpd** command is used to configure a dhcp server for a network interface.
 
-## hostapd.enable(options, callback)
-The **hostapd enable** command is used to host an access point on a specific wireless interface.
+## udhcpd.enable(options, callback)
+The **udhcpd enable** command is used to start a dhcp server on a specific network interface.
 
 ``` javascript
-var hostapd = require('wireless-tools/hostapd');
+var udhcpd = require('wireless-tools/udhcpd');
 
 var options = {
-  channel: 6,
-  driver: 'rtl871xdrv',
-  hw_mode: 'g',
   interface: 'wlan0',
-  ssid: 'RaspberryPi',
-  wpa: 2,
-  wpa_passphrase: 'raspberry'
+  start: '192.168.10.100',
+  end: '192.168.10.200',
+  option: {
+    router: '192.168.10.1',
+    subnet: '255.255.255.0',
+    dns: [ '4.4.4.4', '8.8.8.8' ]
+  }
 };
 
-hostapd.enable(options, function(err) {
-  // the access point was created
+udhcpd.enable(options, function(err) {
+  // the dhcp server was started
 });
 ```

@@ -21,9 +21,44 @@
  *
  */
 
-var wireless_tools = module.exports = {
-  hostapd: require('./hostapd'),
-  ifconfig: require('./ifconfig'),
-  iwconfig: require('./iwconfig'),
-  udhcpd: require('./udhcpd')
+var child_process = require('child_process');
+
+var udhcpd = module.exports = {
+  exec: child_process.exec,
+  enable: enable
 };
+
+function expand_r(options, lines, prefix) {
+  Object.getOwnPropertyNames(options).forEach(function(key) {
+    var full = prefix.concat(key);
+    var value = options[key];
+
+    if (Array.isArray(value)) {
+      value.forEach(function(val) {
+        lines.push(full.concat(val).join(' '));
+      });      
+    }
+    else if (typeof(value) == 'object') {
+      expand_r(value, lines, full);
+    }
+    else {
+      lines.push(full.concat(value).join(' '));
+    }
+  });
+}
+
+function expand(options) {
+  var lines = [];
+  expand_r(options, lines, []);
+  return lines;
+}
+
+function enable(options, callback) {
+  var file = options.interface + '-udhcpd.conf';
+
+  var commands = [].concat(
+    'cat <<EOF >' + file + ' && udhcpd ' + file + ' && rm -f ' + file,
+    expand(options));
+
+  return this.exec(commands.join('\n'), callback);
+}
