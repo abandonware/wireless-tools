@@ -25,6 +25,7 @@ var child_process = require('child_process');
 
 var udhcpd = module.exports = {
   exec: child_process.exec,
+  disable: disable,
   enable: enable
 };
 
@@ -62,3 +63,9 @@ function enable(options, callback) {
 
   return this.exec(commands.join('\n'), callback);
 }
+
+function disable(interface, callback) {
+  var file = interface + '-udhcpd.conf';
+  return this.exec('kill `pgrep -f ' + file + '` || true', callback);
+}
+
