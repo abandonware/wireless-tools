@@ -4,6 +4,8 @@
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 
 ## Table of Contents
+- [hostapd](#hostapd) - configure an access point
+  - [hostapd.enable(options, callback)](#hostapdenableoptions-callback) - host an access point
 - [ifconfig](#ifconfig) - configure network interfaces
   - [ifconfig.status(callback)](#ifconfigstatuscallback) - status of all network interfaces
   - [ifconfig.status(interface, callback)](#ifconfigstatusinterface-callback) - status of a network interface
@@ -180,4 +182,28 @@ iwconfig.status('wlan0', function(err, status) {
   signal: 50,
   ssid: 'RaspberryPi'
 }
+```
+
+# hostapd
+The **hostapd** command is used to configure wireless access points.
+
+## hostapd.enable(options, callback)
+The **hostapd enable** command is used to host an access point on a specific wireless interface.
+
+``` javascript
+var hostapd = require('wireless-tools/hostapd');
+
+var options = {
+  channel: 6,
+  driver: 'rtl871xdrv',
+  hw_mode: 'g',
+  interface: 'wlan0',
+  ssid: 'RaspberryPi',
+  wpa: 2,
+  wpa_passphrase: 'raspberry'
+};
+
+hostapd.enable(options, function(err) {
+  // the access point was created
+});
 ```
