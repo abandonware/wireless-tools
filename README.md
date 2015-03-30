@@ -17,6 +17,7 @@
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
+  - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
 
 # hostapd
 The **hostapd** command is used to configure wireless access points.
@@ -244,5 +245,16 @@ var options = {
 
 udhcpd.enable(options, function(err) {
   // the dhcp server was started
+});
+```
+
+## udhcpd.disable(interface, callback)
+The **udhcpd disable** command is used to stop a dhcp server on a specific network interface.
+
+``` javascript
+var udhcpd = require('wireless-tools/udhcpd');
+
+udhcpd.disable('wlan0', function(err) {
+  // the dhcp server was stopped
 });
 ```
