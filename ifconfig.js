@@ -26,7 +26,8 @@ var child_process = require('child_process');
 var ifconfig = module.exports = {
   exec: child_process.exec,
   status: status,
-  down: down
+  down: down,
+  up: up
 };
 
 function parse_status_block(block) {
@@ -109,4 +110,12 @@ function status(interface, callback) {
 
 function down(interface, callback) {
   this.exec('ifconfig ' + interface + ' down', callback);
+}
+
+function up(options, callback) {
+  this.exec('ifconfig ' + options.interface +
+    ' ' + options.ipv4_address +
+    ' netmask ' + options.ipv4_subnet_mask +
+    ' broadcast ' + options.ipv4_broadcast +
+    ' up', callback);
 }
