@@ -25,8 +25,14 @@ var child_process = require('child_process');
 
 var hostapd = module.exports = {
   exec: child_process.exec,
+  disable: disable,
   enable: enable
 };
+
+function disable(interface, callback) {
+  var file = interface + '-hostapd.conf';
+  return this.exec('kill `pgrep -f ' + file + '` || true', callback);
+}
 
 function enable(options, callback) {
   var file = options.interface + '-hostapd.conf';
