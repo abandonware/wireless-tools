@@ -37,8 +37,7 @@ describe('hostapd', function() {
           'interface=wlan0\n' +
           'ssid=RaspberryPi\n' +
           'wpa=2\n' +
-          'wpa_passphrase=raspberry\n' +
-          'EOF');
+          'wpa_passphrase=raspberry');
 
         callback(null, '', '');
       };
