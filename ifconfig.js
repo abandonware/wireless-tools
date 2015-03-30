@@ -28,7 +28,7 @@ var ifconfig = module.exports = {
   status: status
 };
 
-function parse_status_interface(block) {
+function parse_status_block(block) {
   var match;
 
   var parsed = {
@@ -86,13 +86,20 @@ function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
     else callback(error,
-      stdout.trim().split('\n\n').map(parse_status_interface));
+      stdout.trim().split('\n\n').map(parse_status_block));
+  };
+}
+
+function parse_status_interface(callback) {
+  return function(error, stdout, stderr) {
+    if (error) callback(error);
+    else callback(error, parse_status_block(stdout.trim()));
   };
 }
 
 function status(interface, callback) {
   if (callback) {
-    this.exec('ifconfig ' + interface, parse_status(callback));  
+    this.exec('ifconfig ' + interface, parse_status_interface(callback));  
   }
   else {
     this.exec('ifconfig', parse_status(interface));  
