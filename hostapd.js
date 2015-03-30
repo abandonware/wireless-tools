@@ -39,5 +39,5 @@ function enable(options, callback) {
     commands.push(key + '=' + options[key]);
   });
 
-  return this.exec(commands.concat('EOF').join('\n'), callback);
+  return this.exec(commands.join('\n'), callback);
 }
