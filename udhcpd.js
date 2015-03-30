@@ -66,6 +66,6 @@ function enable(options, callback) {
 
 function disable(interface, callback) {
   var file = interface + '-udhcpd.conf';
-  return this.exec('kill `pgrep -f ' + file + '` || true', callback);
+  return this.exec('kill `pgrep -f "^udhcpd ' + file + '"` || true', callback);
 }
 
