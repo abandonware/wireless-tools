@@ -132,4 +132,29 @@ describe('ifconfig', function() {
       });
     })
   })
+
+  describe('ifconfig.down(interface, callback)', function() {
+    it('should take down the specified interface', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig wlan0 down');
+        callback(null, '', '');
+      };
+
+      ifconfig.down('wlan0', function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      ifconfig.exec = function(command, callback) {
+        callback('error');
+      };
+
+      ifconfig.down('wlan0', function(err) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
 })
