@@ -25,6 +25,31 @@ var should = require('should');
 var udhcpd = require('../udhcpd');
 
 describe('udhcpd', function() {
+  describe('udhcpd.disable(options, callback)', function() {
+    it('should stop the daemons', function(done) {
+      udhcpd.exec = function(command, callback) {
+        should(command).eql('kill `pgrep -f wlan0-udhcpd.conf` || true');
+        callback(null, '', '');
+      };
+
+      udhcpd.disable('wlan0', function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      udhcpd.exec = function(command, callback) {
+        callback('error');
+      };
+
+      udhcpd.disable('wlan0', function(err) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
+
   describe('udhcpd.enable(options, callback)', function() {
     it('should start the daemon', function(done) {
       udhcpd.exec = function(command, callback) {

@@ -1,11 +1,12 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.7.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.8.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 
 ## Table of Contents
 - [hostapd](#hostapd) - configure an access point
   - [hostapd.enable(options, callback)](#hostapdenableoptions-callback) - host an access point
+  - [hostapd.disable(interface, callback)](#hostapddisableinterface-callback) - stop hosting an access point
 - [ifconfig](#ifconfig) - configure network interfaces
   - [ifconfig.status(callback)](#ifconfigstatuscallback) - status of all network interfaces
   - [ifconfig.status(interface, callback)](#ifconfigstatusinterface-callback) - status of a network interface
@@ -16,6 +17,7 @@
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
+  - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
 
 # hostapd
 The **hostapd** command is used to configure wireless access points.
@@ -38,6 +40,17 @@ var options = {
 
 hostapd.enable(options, function(err) {
   // the access point was created
+});
+```
+
+## hostapd.disable(interface, callback)
+The **hostapd disable** command is used to stop hosting an access point on a specific wireless interface.
+
+``` javascript
+var hostapd = require('wireless-tools/hostapd');
+
+hostapd.disable('wlan0', function(err) {
+  // no longer hosting the access point
 });
 ```
 
@@ -232,5 +245,16 @@ var options = {
 
 udhcpd.enable(options, function(err) {
   // the dhcp server was started
+});
+```
+
+## udhcpd.disable(interface, callback)
+The **udhcpd disable** command is used to stop a dhcp server on a specific network interface.
+
+``` javascript
+var udhcpd = require('wireless-tools/udhcpd');
+
+udhcpd.disable('wlan0', function(err) {
+  // the dhcp server was stopped
 });
 ```
