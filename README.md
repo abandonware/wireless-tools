@@ -6,9 +6,9 @@
 ## Table of Contents
 - [ifconfig](#ifconfig) - configure network interfaces
   - [ifconfig.status(callback)](#ifconfigstatuscallback) - status of all network interfaces
-  - [ifconfig.status(interface, callback)](#ifconfigstatusinterfacecallback) - status of a network interface
-  - [ifconfig.down(interface, callback)](#ifconfigdowninterfacecallback) - take down a network interface
-  - [ifconfig.up(options, callback)](#ifconfigupoptionscallback) - bring up a network interface
+  - [ifconfig.status(interface, callback)](#ifconfigstatusinterface-callback) - status of a network interface
+  - [ifconfig.down(interface, callback)](#ifconfigdowninterface-callback) - take down a network interface
+  - [ifconfig.up(options, callback)](#ifconfigupoptions-callback) - bring up a network interface
 
 # ifconfig
 The **ifconfig** command is used to configure network interfaces.
