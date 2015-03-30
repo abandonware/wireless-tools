@@ -22,5 +22,6 @@
  */
 
 var wireless_tools = module.exports = {
-  ifconfig: require('./ifconfig')
+  ifconfig: require('./ifconfig'),
+  iwconfig: require('./iwconfig')
 };
