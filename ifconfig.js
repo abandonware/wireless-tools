@@ -85,7 +85,8 @@ function parse_status_interface(block) {
 function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
-    else callback(error, stdout.split('\n\n').map(parse_status_interface));
+    else callback(error,
+      stdout.trim().split('\n\n').map(parse_status_interface));
   };
 }
 
