@@ -134,7 +134,7 @@ describe('ifconfig', function() {
   })
 
   describe('ifconfig.down(interface, callback)', function() {
-    it('should take down the specified interface', function(done) {
+    it('should take down the interface', function(done) {
       ifconfig.exec = function(command, callback) {
         should(command).eql('ifconfig wlan0 down');
         callback(null, '', '');
@@ -152,6 +152,47 @@ describe('ifconfig', function() {
       };
 
       ifconfig.down('wlan0', function(err) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
+
+  describe('ifconfig.up(options, callback)', function() {
+    it('should bring up the interface', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig wlan0 192.168.10.1' +
+          ' netmask 255.255.255.0 broadcast 192.168.10.255 up');
+
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        ipv4_address: '192.168.10.1',
+        ipv4_broadcast: '192.168.10.255',
+        ipv4_subnet_mask: '255.255.255.0'
+      };
+
+      ifconfig.up(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      ifconfig.exec = function(command, callback) {
+        callback('error');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        ipv4_address: '192.168.10.1',
+        ipv4_broadcast: '192.168.10.255',
+        ipv4_subnet_mask: '255.255.255.0'
+      };
+
+      ifconfig.down(options, function(err) {
         should(err).eql('error');
         done();
       });
