@@ -6,6 +6,7 @@
 ## Table of Contents
 - [hostapd](#hostapd) - configure an access point
   - [hostapd.enable(options, callback)](#hostapdenableoptions-callback) - host an access point
+  - [hostapd.disable(interface, callback)](#hostapddisableinterface-callback) - stop hosting an access point
 - [ifconfig](#ifconfig) - configure network interfaces
   - [ifconfig.status(callback)](#ifconfigstatuscallback) - status of all network interfaces
   - [ifconfig.status(interface, callback)](#ifconfigstatusinterface-callback) - status of a network interface
@@ -38,6 +39,17 @@ var options = {
 
 hostapd.enable(options, function(err) {
   // the access point was created
+});
+```
+
+## hostapd.disable(interface, callback)
+The **hostapd disable** command is used to stop hosting an access point on a specific wireless interface.
+
+``` javascript
+var hostapd = require('wireless-tools/hostapd');
+
+hostapd.disable('wlan0', function(err) {
+  // no longer hosting the access point
 });
 ```
 

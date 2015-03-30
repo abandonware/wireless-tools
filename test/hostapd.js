@@ -25,6 +25,31 @@ var should = require('should');
 var hostapd = require('../hostapd');
 
 describe('hostapd', function() {
+  describe('hostapd.disable(options, callback)', function() {
+    it('should stop the daemons', function(done) {
+      hostapd.exec = function(command, callback) {
+        should(command).eql('kill `pgrep -f wlan0-hostapd.conf` || true');
+        callback(null, '', '');
+      };
+
+      hostapd.disable('wlan0', function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      hostapd.exec = function(command, callback) {
+        callback('error');
+      };
+
+      hostapd.disable('wlan0', function(err) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
+
   describe('hostapd.enable(options, callback)', function() {
     it('should start the daemon', function(done) {
       hostapd.exec = function(command, callback) {
