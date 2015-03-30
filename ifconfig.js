@@ -104,7 +104,7 @@ function status(interface, callback) {
     this.exec('ifconfig ' + interface, parse_status_interface(callback));  
   }
   else {
-    this.exec('ifconfig', parse_status(interface));  
+    this.exec('ifconfig -a', parse_status(interface));  
   }
 }
 

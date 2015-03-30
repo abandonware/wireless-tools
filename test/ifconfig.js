@@ -58,7 +58,7 @@ describe('ifconfig', function() {
   describe('ifconfig.status(callback)', function() {
     it('should get the status for each interface', function(done) {
       ifconfig.exec = function(command, callback) {
-        should(command).eql('ifconfig');
+        should(command).eql('ifconfig -a');
         callback(null, IFCONFIG_STATUS_LINUX, '');
       };
 
