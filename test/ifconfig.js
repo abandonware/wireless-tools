@@ -111,13 +111,11 @@ describe('ifconfig', function() {
       };
 
       ifconfig.status('wlan0', function(err, status) {
-        should(status).eql([
-          {
-            interface: 'wlan0',
-            address: 'de:ad:be:ef:c0:de',
-            ipv6_address: 'fe80::21c:c0ff:feae:b5e6/64'
-          },
-        ]);
+        should(status).eql({
+          interface: 'wlan0',
+          address: 'de:ad:be:ef:c0:de',
+          ipv6_address: 'fe80::21c:c0ff:feae:b5e6/64'
+        });
 
         done();
       });
