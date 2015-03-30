@@ -28,7 +28,8 @@ describe('hostapd', function() {
   describe('hostapd.disable(options, callback)', function() {
     it('should stop the daemons', function(done) {
       hostapd.exec = function(command, callback) {
-        should(command).eql('kill `pgrep -f wlan0-hostapd.conf` || true');
+        should(command).eql(
+          'kill `pgrep -f "^hostapd -B wlan0-hostapd.conf"` || true');
         callback(null, '', '');
       };
 

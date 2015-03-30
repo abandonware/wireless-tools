@@ -28,7 +28,9 @@ describe('udhcpd', function() {
   describe('udhcpd.disable(options, callback)', function() {
     it('should stop the daemons', function(done) {
       udhcpd.exec = function(command, callback) {
-        should(command).eql('kill `pgrep -f wlan0-udhcpd.conf` || true');
+        should(command).eql(
+          'kill `pgrep -f "^udhcpd wlan0-udhcpd.conf"` || true');
+
         callback(null, '', '');
       };
 
