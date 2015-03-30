@@ -1,5 +1,5 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.4.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 
@@ -9,6 +9,9 @@
   - [ifconfig.status(interface, callback)](#ifconfigstatusinterface-callback) - status of a network interface
   - [ifconfig.down(interface, callback)](#ifconfigdowninterface-callback) - take down a network interface
   - [ifconfig.up(options, callback)](#ifconfigupoptions-callback) - bring up a network interface
+- [iwconfig](#iwconfig) - configure wireless network interfaces
+  - [iwconfig.status(callback)](#iwconfigstatuscallback) - status of all wireless network interfaces
+  - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
 
 # ifconfig
 The **ifconfig** command is used to configure network interfaces.
@@ -112,4 +115,69 @@ var options = {
 ifconfig.up(options, function(err) {
   // the interface is up 
 });
+```
+
+# iwconfig
+The **iwconfig** command is used to configure wireless network interfaces.
+
+## iwconfig.status(callback)
+The **iwconfig status** command is used to query the status of all configured wireless interfaces.
+
+``` javascript
+var iwconfig = require('wireless-tools/iwconfig');
+
+iwconfig.status(function(err, status) {
+  console.log(status);
+});
+
+// =>
+[
+  {
+    interface: 'wlan0',
+    access_point: '00:0b:81:95:12:21',
+    frequency: 2.437,
+    ieee: '802.11bg',
+    mode: 'master',
+    noise: 0,
+    quality: 77,
+    sensitivity: 0,
+    signal: 50,
+    ssid: 'RaspberryPi'
+  },
+  {
+    interface: 'wlan1',
+    frequency: 2.412,
+    mode: 'auto',
+    noise: 0,
+    quality: 0,
+    sensitivity: 0,
+    signal: 0,
+    unassociated: true
+  }
+]
+```
+
+## iwconfig.status(interface, callback)
+The **iwconfig interface status** command is used to query the status of a specific wireless interface.
+
+``` javascript
+var iwconfig = require('wireless-tools/iwconfig');
+
+iwconfig.status('wlan0', function(err, status) {
+  console.log(status);
+});
+
+// =>
+{
+  interface: 'wlan0',
+  access_point: '00:0b:81:95:12:21',
+  frequency: 2.437,
+  ieee: '802.11bg',
+  mode: 'master',
+  noise: 0,
+  quality: 77,
+  sensitivity: 0,
+  signal: 50,
+  ssid: 'RaspberryPi'
+}
 ```
