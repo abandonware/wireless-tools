@@ -21,8 +21,23 @@
  *
  */
 
-var wireless_tools = module.exports = {
-  hostapd: require('./hostapd'),
-  ifconfig: require('./ifconfig'),
-  iwconfig: require('./iwconfig')
+var child_process = require('child_process');
+
+var hostapd = module.exports = {
+  exec: child_process.exec,
+  enable: enable
 };
+
+function enable(options, callback) {
+  var file = options.interface + '-hostapd.conf';
+
+  var commands = [
+    'cat <<EOF >' + file + ' && hostapd -B ' + file + ' && rm -f ' + file
+  ];
+
+  Object.getOwnPropertyNames(options).forEach(function(key) {
+    commands.push(key + '=' + options[key]);
+  });
+
+  return this.exec(commands.concat('EOF').join('\n'), callback);
+}
