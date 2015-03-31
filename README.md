@@ -1,5 +1,5 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.10.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.11.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 [![Downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
@@ -16,6 +16,8 @@
 - [iwconfig](#iwconfig) - configure wireless network interfaces
   - [iwconfig.status(callback)](#iwconfigstatuscallback) - status of all wireless network interfaces
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
+- [iwlist](#iwlist) - query wireless network interfaces
+  - [iwlist.scan(interface, callback)](#iwlistscaninterface-callback) - scan for wireless networks
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
   - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
@@ -222,6 +224,64 @@ iwconfig.status('wlan0', function(err, status) {
   signal: 50,
   ssid: 'RaspberryPi'
 }
+```
+
+# iwlist
+The **iwlist** command is used to get detailed information from a wireless interface.
+
+## iwlist.scan(interface, callback)
+The **iwlist scan** command is used to scan for wireless networks visible to a wireless interface. For convenience, the networks are sorted by signal strength.
+
+``` javascript
+var iwlist = require('wireless-tools/iwlist');
+
+iwlist.scan('wlan0', function(err, networks) {
+  console.log(networks);
+});
+
+// =>
+[
+  {
+    address: '00:0b:81:ab:14:22',
+    ssid: 'BlueberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wpa',
+    quality: 48,
+    signal: 87
+  },
+  {
+    address: '00:0b:81:95:12:21',
+    ssid: 'RaspberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wpa2',
+    quality: 58,
+    signal: 83
+  },
+  {
+    address: '00:0b:81:cd:f2:04',
+    ssid: 'BlackberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wep',
+    quality: 48,
+    signal: 80
+  },
+  {
+    address: '00:0b:81:fd:42:14',
+    ssid: 'CranberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'open',
+    quality: 32,
+    signal: 71
+  }
+]
 ```
 
 # udhcpd
