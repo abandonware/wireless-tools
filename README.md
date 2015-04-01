@@ -1,5 +1,5 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.11.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.12.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 [![Downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
@@ -21,6 +21,9 @@
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
   - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
+- [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
+  - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
+  - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
 
 # hostapd
 The **hostapd** command is used to configure wireless access points.
@@ -317,5 +320,37 @@ var udhcpd = require('wireless-tools/udhcpd');
 
 udhcpd.disable('wlan0', function(err) {
   // the dhcp server was stopped
+});
+```
+
+# wpa_supplicant
+The **wpa_supplicant** command is used to configure a wireless network connection for a network interface.
+
+## wpa_supplicant.enable(options, callback)
+The **wpa_supplicant enable** command is used to join a wireless network on a specific network interface.
+
+``` javascript
+var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+
+var options = {
+  interface: 'wlan0',
+  ssid: 'RaspberryPi',
+  passphrase: 'raspberry',
+  driver: 'wext'
+};
+
+wpa_supplicant.enable(options, function(err) {
+  // connected to the wireless network
+});
+```
+
+## wpa_supplicant.disable(interface, callback)
+The **wpa_supplicant disable** command is used to disconnect from a wireless network on a specific network interface.
+
+``` javascript
+var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+
+wpa_supplicant.disable('wlan0', function(err) {
+  // disconnected from wireless network
 });
 ```

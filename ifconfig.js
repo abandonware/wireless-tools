@@ -109,11 +109,11 @@ function status(interface, callback) {
 }
 
 function down(interface, callback) {
-  this.exec('ifconfig ' + interface + ' down', callback);
+  return this.exec('ifconfig ' + interface + ' down', callback);
 }
 
 function up(options, callback) {
-  this.exec('ifconfig ' + options.interface +
+  return this.exec('ifconfig ' + options.interface +
     ' ' + options.ipv4_address +
     ' netmask ' + options.ipv4_subnet_mask +
     ' broadcast ' + options.ipv4_broadcast +

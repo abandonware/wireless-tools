@@ -95,9 +95,10 @@ function parse_status_interface(callback) {
 
 function status(interface, callback) {
   if (callback) {
-    this.exec('iwconfig ' + interface, parse_status_interface(callback));  
+    return this.exec('iwconfig ' + interface,
+      parse_status_interface(callback));  
   }
   else {
-    this.exec('iwconfig', parse_status(interface));  
+    return this.exec('iwconfig', parse_status(interface));  
   }
 }
