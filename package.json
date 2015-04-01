@@ -1,6 +1,6 @@
 {
   "name": "wireless-tools",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "Wireless tools for Node.js",
   "main": "wireless-tools.js",
   "scripts": {
@@ -18,7 +18,9 @@
     "ifconfig",
     "iwconfig",
     "iwlist",
-    "udhcpd"
+    "udhcpc",
+    "udhcpd",
+    "wpa_supplicant"
   ],
   "author": "Christopher M. Baker",
   "license": "MIT",
