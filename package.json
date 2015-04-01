@@ -18,7 +18,9 @@
     "ifconfig",
     "iwconfig",
     "iwlist",
-    "udhcpd"
+    "udhcpc",
+    "udhcpd",
+    "wpa_supplicant"
   ],
   "author": "Christopher M. Baker",
   "license": "MIT",
