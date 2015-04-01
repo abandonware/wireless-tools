@@ -1,6 +1,6 @@
 {
   "name": "wireless-tools",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "description": "Wireless tools for Node.js",
   "main": "wireless-tools.js",
   "scripts": {

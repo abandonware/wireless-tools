@@ -23,19 +23,58 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **iwlist** command is used to get detailed information from a
+ * wireless interface.
+ *
+ * @static
+ * @category iwlist
+ *
+ */
 var iwlist = module.exports = {
   exec: child_process.exec,
   scan: scan
 };
 
+/**
+ * Returns a truthy if the network has an ssid; falsy otherwise.
+ *
+ * @private
+ * @static
+ * @category iwlist
+ * @param {object} network The scanned network object.
+ * @returns {string} The ssid.
+ *
+ */
 function has_ssid(network) {
   return network.ssid;
 }
 
+/**
+ * A comparison function to sort networks ordered by signal strength.
+ *
+ * @private
+ * @static
+ * @category iwlist
+ * @param {object} a A scanned network object.
+ * @param {object} b Another scanned network object.
+ * @returns {number} The comparison value.
+ *
+ */
 function by_signal(a, b) {
   return b.signal - a.signal;
 }
 
+/**
+ * Parses a scanned wireless network cell.
+ *
+ * @private
+ * @static
+ * @category iwlist
+ * @param {string} cell The section of stdout for the cell.
+ * @returns {object} The scanned network object.
+ *
+ */
 function parse_cell(cell) {
   var parsed = { };
 
@@ -83,6 +122,15 @@ function parse_cell(cell) {
   return parsed;
 }
 
+/**
+ * Parses all scanned wireless network cells.
+ *
+ * @private
+ * @static
+ * @category iwlist
+ * @param {function} callback The callback function.
+ *
+ */
 function parse_scan(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
@@ -94,6 +142,68 @@ function parse_scan(callback) {
   };
 }
 
+/**
+ * The **iwlist scan** command is used to scan for wireless networks
+ * visible to a wireless interface. For convenience, the networks are
+ * sorted by signal strength.
+ *
+ * @static
+ * @category iwlist
+ * @param {string} interface The wireless network interface.
+ * @param {function} callback The callback function.
+ * @example
+ *
+ * var iwlist = require('wireless-tools/iwlist');
+ *
+ * iwlist.scan('wlan0', function(err, networks) {
+ *   console.log(networks);
+ * });
+ *
+ * // =>
+ * [
+ *   {
+ *     address: '00:0b:81:ab:14:22',
+ *     ssid: 'BlueberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wpa',
+ *     quality: 48,
+ *     signal: 87
+ *   },
+ *   {
+ *     address: '00:0b:81:95:12:21',
+ *     ssid: 'RaspberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wpa2',
+ *     quality: 58,
+ *     signal: 83
+ *   },
+ *   {
+ *     address: '00:0b:81:cd:f2:04',
+ *     ssid: 'BlackberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wep',
+ *     quality: 48,
+ *     signal: 80
+ *   },
+ *   {
+ *     address: '00:0b:81:fd:42:14',
+ *     ssid: 'CranberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'open',
+ *     quality: 32,
+ *     signal: 71
+ *   }
+ * ]
+ *
+ */
 function scan(interface, callback) {
   this.exec('iwlist ' + interface + ' scan', parse_scan(callback));  
 }
