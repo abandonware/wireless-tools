@@ -21,12 +21,20 @@
  *
  */
 
-var wireless_tools = module.exports = {
-  hostapd: require('./hostapd'),
-  ifconfig: require('./ifconfig'),
-  iwconfig: require('./iwconfig'),
-  iwlist: require('./iwlist'),
-  udhcpc: require('./udhcpc'),
-  udhcpd: require('./udhcpd'),
-  wpa_supplicant: require('./wpa_supplicant')
+var child_process = require('child_process');
+
+var udhcpc = module.exports = {
+  exec: child_process.exec,
+  disable: disable,
+  enable: enable
 };
+
+function disable(interface, callback) {
+  var command = 'kill `pgrep -f "^udhcpc -i ' + interface + '"` || true';
+  return this.exec(command, callback);
+}
+
+function enable(options, callback) {
+  var command = 'udhcpc -i ' + options.interface + ' -n';
+  return this.exec(command, callback);  
+}

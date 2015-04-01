@@ -1,5 +1,5 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.12.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![Release Version](https://img.shields.io/badge/version-0.13.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
 [![Downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
@@ -18,6 +18,9 @@
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
 - [iwlist](#iwlist) - query wireless network interfaces
   - [iwlist.scan(interface, callback)](#iwlistscaninterface-callback) - scan for wireless networks
+- [udhcpc](#udhcpc) - configure a dhcp client
+  - [udhcpc.enable(options, callback)](#udhcpcenableoptions-callback) - start a dhcp client
+  - [udhcpc.disable(interface, callback)](#udhcpcdisableinterface-callback) - stop a dhcp client
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
   - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
@@ -285,6 +288,35 @@ iwlist.scan('wlan0', function(err, networks) {
     signal: 71
   }
 ]
+```
+
+# udhcpc
+The **udhcpc** command is used to configure a dhcp client for a network interface.
+
+## udhcpc.enable(options, callback)
+The **udhcpc enable** command is used to start a dhcp client on a specific network interface.
+
+``` javascript
+var udhcpc = require('wireless-tools/udhcpc');
+
+var options = {
+  interface: 'wlan0'
+};
+
+udhcpc.enable(options, function(err) {
+  // the dhcp client was started
+});
+```
+
+## udhcpc.disable(interface, callback)
+The **udhcpc disable** command is used to stop a dhcp client on a specific network interface.
+
+``` javascript
+var udhcpc = require('wireless-tools/udhcpc');
+
+udhcpc.disable('wlan0', function(err) {
+  // the dhcp client was stopped
+});
 ```
 
 # udhcpd
