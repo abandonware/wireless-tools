@@ -23,17 +23,65 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **udhcpc** command is used to configure a dhcp client for a
+ * network interface.
+ *
+ * @static
+ * @category udhcpc
+ *
+ */
 var udhcpc = module.exports = {
   exec: child_process.exec,
   disable: disable,
   enable: enable
 };
 
+/**
+ * The **udhcpc disable** command is used to stop a dhcp client on a
+ * specific network interface.
+ *
+ * @static
+ * @category udhcpc
+ * @param {string} interface The network interface.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var udhcpc = require('wireless-tools/udhcpc');
+ *
+ * udhcpc.disable('wlan0', function(err) {
+ *   // the dhcp client was stopped
+ * });
+ *
+ */
 function disable(interface, callback) {
   var command = 'kill `pgrep -f "^udhcpc -i ' + interface + '"` || true';
   return this.exec(command, callback);
 }
 
+/**
+ * The **udhcpc enable** command is used to start a dhcp client on a
+ * specific network interface.
+ *
+ * @static
+ * @category udhcpc
+ * @param {object} options The dhcp client configuration.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var udhcpc = require('wireless-tools/udhcpc');
+ *
+ * var options = {
+ *   interface: 'wlan0'
+ * };
+ *
+ * udhcpc.enable(options, function(err) {
+ *   // the dhcp client was started 
+ * });
+ *
+ */
 function enable(options, callback) {
   var command = 'udhcpc -i ' + options.interface + ' -n';
   return this.exec(command, callback);  

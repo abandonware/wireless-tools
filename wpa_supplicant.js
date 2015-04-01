@@ -23,12 +23,38 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **wpa_supplicant** command is used to configure a wireless
+ * network connection for a network interface.
+ *
+ * @static
+ * @category wpa_supplicant
+ *
+ */
 var wpa_supplicant = module.exports = {
   exec: child_process.exec,
   disable: disable,
   enable: enable
 };
 
+/**
+ * The **wpa_supplicant disable** command is used to disconnect from
+ * a wireless network on a specific network interface.
+ *
+ * @static
+ * @category wpa_supplicant
+ * @param {string} interface The network interface.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+ *
+ * wpa_supplicant.disable('wlan0', function(err) {
+ *   // disconnected from wireless network 
+ * });
+ *
+ */
 function disable(interface, callback) {
   var command = 'kill `pgrep -f "^wpa_supplicant -i '
     + interface + '"` || true';
@@ -36,6 +62,31 @@ function disable(interface, callback) {
   return this.exec(command, callback);
 }
 
+/**
+ * The **wpa_supplicant enable** command is used to join a wireless network
+ * on a specific network interface.
+ *
+ * @static
+ * @category wpa_supplicant
+ * @param {object} options The wireless network configuration.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+ *
+ * var options = {
+ *   interface: 'wlan0',
+ *   ssid: 'RaspberryPi',
+ *   passphrase: 'raspberry',
+ *   driver: 'wext'
+ * };
+ *
+ * wpa_supplicant.enable(options, function(err) {
+ *   // connected to the wireless network 
+ * });
+ *
+ */
 function enable(options, callback) {
   var file = options.interface + '-wpa_supplicant.conf';
 
