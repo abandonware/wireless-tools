@@ -21,11 +21,27 @@
  *
  */
 
-var wireless_tools = module.exports = {
-  hostapd: require('./hostapd'),
-  ifconfig: require('./ifconfig'),
-  iwconfig: require('./iwconfig'),
-  iwlist: require('./iwlist'),
-  udhcpd: require('./udhcpd'),
-  wpa_supplicant: require('./wpa_supplicant')
+var child_process = require('child_process');
+
+var wpa_supplicant = module.exports = {
+  exec: child_process.exec,
+  disable: disable,
+  enable: enable
 };
+
+function disable(interface, callback) {
+  var command = 'kill `pgrep -f "^wpa_supplicant -i '
+    + interface + '"` || true';
+
+  return this.exec(command, callback);
+}
+
+function enable(options, callback) {
+  var file = options.interface + '-wpa_supplicant.conf';
+
+  var command = 'wpa_passphrase "' + options.ssid + '" "' + options.passphrase
+    + '" > ' + file + ' && wpa_supplicant -i ' + options.interface + ' -B -D '
+    + options.driver + ' -c ' + file + ' && rm -f ' + file;
+
+  return this.exec(command, callback);  
+}
