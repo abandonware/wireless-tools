@@ -23,12 +23,37 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **hostpad** command is used to configure wireless access points.
+ *
+ * @static
+ * @category hostapd
+ *
+ */
 var hostapd = module.exports = {
   exec: child_process.exec,
   disable: disable,
   enable: enable
 };
 
+/**
+ * The **hostpad disable** command is used to stop hosting an access point
+ * on a specific wireless interface.
+ *
+ * @static
+ * @category hostapd
+ * @param {string} interface The network interface of the access point.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var hostapd = require('wireless-tools/hostapd');
+ *
+ * hostapd.disable('wlan0', function(err) {
+ *   // no longer hosting the access point
+ * });
+ *
+ */
 function disable(interface, callback) {
   var file = interface + '-hostapd.conf';
 
@@ -36,6 +61,34 @@ function disable(interface, callback) {
     callback);
 }
 
+/**
+ * The **hostpad enable** command is used to host an access point
+ * on a specific wireless interface.
+ *
+ * @static
+ * @category hostapd
+ * @param {object} options The access point configuration.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var hostapd = require('wireless-tools/hostapd');
+ *
+ * var options = {
+ *   channel: 6,
+ *   driver: 'rtl871xdrv',
+ *   hw_mode: 'g',
+ *   interface: 'wlan0',
+ *   ssid: 'RaspberryPi',
+ *   wpa: 2,
+ *   wpa_passphrase: 'raspberry'
+ * };
+ *
+ * hostapd.enable(options, function(err) {
+ *   // the access point was created
+ * });
+ *
+ */
 function enable(options, callback) {
   var file = options.interface + '-hostapd.conf';
 

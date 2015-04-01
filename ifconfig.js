@@ -23,6 +23,13 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **ifconfig** command is used to configure network interfaces.
+ *
+ * @static
+ * @category ifconfig
+ *
+ */
 var ifconfig = module.exports = {
   exec: child_process.exec,
   status: status,
@@ -30,6 +37,16 @@ var ifconfig = module.exports = {
   up: up
 };
 
+/**
+ * Parses the status for a single network interface.
+ *
+ * @private
+ * @static
+ * @category ifconfig
+ * @param {string} block The section of stdout for the interface.
+ * @returns {object} The parsed network interface status.
+ *
+ */
 function parse_status_block(block) {
   var match;
 
@@ -84,6 +101,15 @@ function parse_status_block(block) {
   return parsed;
 }
 
+/**
+ * Parses the status for all network interfaces.
+ *
+ * @private
+ * @static
+ * @category ifconfig
+ * @param {function} callback The callback function.
+ *
+ */
 function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
@@ -92,6 +118,15 @@ function parse_status(callback) {
   };
 }
 
+/**
+ * Parses the status for a single network interface.
+ *
+ * @private
+ * @static
+ * @category ifconfig
+ * @param {function} callback The callback function.
+ *
+ */
 function parse_status_interface(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
@@ -99,6 +134,59 @@ function parse_status_interface(callback) {
   };
 }
 
+/**
+ * The **ifconfig status** command is used to query the status of all
+ * configured interfaces.
+ *
+ * @static
+ * @category ifconfig
+ * @param {string} [interface] The network interface.
+ * @param {function} callback The callback function.
+ * @example
+ *
+ * var ifconfig = require('wireless-tools/ifconfig');
+ *
+ * ifconfig.status(function(err, status) {
+ *   console.log(status);
+ * });
+ *
+ * // =>
+ * [
+ *   {
+ *     interface: 'eth0',
+ *     link: 'ethernet',
+ *     address: 'b8:27:eb:da:52:ad',
+ *     ipv4_address: '192.168.1.2',
+ *     ipv4_broadcast: '192.168.1.255',
+ *     ipv4_subnet_mask: '255.255.255.0',
+ *     up: true,
+ *     broadcast: true,
+ *     running: true,
+ *     multicast: true
+ *   },
+ *   {
+ *     interface: 'lo',
+ *     link: 'local',
+ *     ipv4_address: '127.0.0.1',
+ *     ipv4_subnet_mask: '255.0.0.0',
+ *     up: true,
+ *     running: true,
+ *     loopback: true
+ *   },
+ *   {
+ *     interface: 'wlan0',
+ *     link: 'ethernet',
+ *     address: '00:0b:81:95:12:21',
+ *     ipv4_address: '192.168.10.1',
+ *     ipv4_broadcast: '192.168.10.255',
+ *     ipv4_subnet_mask: '255.255.255.0',
+ *     up: true,
+ *     broadcast: true,
+ *     multicast: true
+ *   }
+ * ]
+ *
+ */
 function status(interface, callback) {
   if (callback) {
     this.exec('ifconfig ' + interface, parse_status_interface(callback));  
@@ -108,10 +196,50 @@ function status(interface, callback) {
   }
 }
 
+/**
+ * The **ifconfig down** command is used to take down an interface that is up.
+ *
+ * @static
+ * @category ifconfig
+ * @param {string} interface The network interface.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var ifconfig = require('wireless-tools/ifconfig');
+ *
+ * ifconfig.down('wlan0', function(err) {
+ *   // the interface is down
+ * });
+ *
+ */
 function down(interface, callback) {
   return this.exec('ifconfig ' + interface + ' down', callback);
 }
 
+/**
+ * The **ifconfig up** command is used to bring up an interface with the
+ * specified configuration.
+ *
+ * @static
+ * @category ifconfig
+ * @param {object} options The interface configuration.
+ * @param {function} callback The callback function.
+ * @returns {process} The child process.
+ * @example
+ *
+ * var options = {
+ *   interface: 'wlan0',
+ *   ipv4_address: '192.168.10.1',
+ *   ipv4_broadcast: '192.168.10.255',
+ *   ipv4_subnet_mask: '255.255.255.0'
+ * };
+ *
+ * ifconfig.up(options, function(err) {
+ *   // the interface is up 
+ * });
+ *
+ */
 function up(options, callback) {
   return this.exec('ifconfig ' + options.interface +
     ' ' + options.ipv4_address +

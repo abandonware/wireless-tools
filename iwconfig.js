@@ -23,11 +23,28 @@
 
 var child_process = require('child_process');
 
+/**
+ * The **iwconfig** command is used to configure wireless network interfaces.
+ *
+ * @private
+ * @category iwconfig
+ *
+ */
 var iwconfig = module.exports = {
   exec: child_process.exec,
   status: status
 };
 
+/**
+ * Parses the status for a single wireless network interface.
+ *
+ * @private
+ * @static
+ * @category iwconfig
+ * @param {string} block The section of stdout for the interface.
+ * @returns {object} The parsed wireless network interface status.
+ *
+ */
 function parse_status_block(block) {
   var match;
 
@@ -78,6 +95,15 @@ function parse_status_block(block) {
   return parsed;
 }
 
+/**
+ * Parses the status for all wireless network interfaces.
+ *
+ * @private
+ * @static
+ * @category iwconfig
+ * @param {function} callback The callback function.
+ *
+ */
 function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
@@ -86,6 +112,15 @@ function parse_status(callback) {
   };
 }
 
+/**
+ * Parses the status for a single wireless network interface.
+ *
+ * @private
+ * @static
+ * @category iwconfig
+ * @param {function} callback The callback function.
+ *
+ */
 function parse_status_interface(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
@@ -93,6 +128,49 @@ function parse_status_interface(callback) {
   };
 }
 
+/**
+ * Parses the status for a single wireless network interface.
+ *
+ * @private
+ * @static
+ * @category iwconfig
+ * @param {string} [interface] The wireless network interface.
+ * @param {function} callback The callback function.
+ * @example
+ *
+ * var iwconfig = require('wireless-tools/iwconfig');
+ *
+ * iwconfig.status(function(err, status) {
+ *   console.log(status);
+ * });
+ *
+ * // =>
+ * [
+ *   {
+ *     interface: 'wlan0',
+ *     access_point: '00:0b:81:95:12:21',
+ *     frequency: 2.437,
+ *     ieee: '802.11bg',
+ *     mode: 'master',
+ *     noise: 0,
+ *     quality: 77,
+ *     sensitivity: 0,
+ *     signal: 50,
+ *     ssid: 'RaspberryPi'
+ *   },
+ *   {
+ *     interface: 'wlan1',
+ *     frequency: 2.412,
+ *     mode: 'auto',
+ *     noise: 0,
+ *     quality: 0,
+ *     sensitivity: 0,
+ *     signal: 0,
+ *     unassociated: true
+ *   }
+ * ]
+ *
+ */
 function status(interface, callback) {
   if (callback) {
     return this.exec('iwconfig ' + interface,
