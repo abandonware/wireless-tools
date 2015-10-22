@@ -51,6 +51,22 @@ function has_ssid(network) {
 }
 
 /**
+ * Returns a truthy if the network has any key; falsy otherwise.
+ *
+ * @private
+ * @static
+ * @category iwlist
+ * @param {object} network The scanned network object.
+ * @returns {boolean} True if any key.
+ *
+ */
+function has_keys(network) {
+  return Object.keys(network).length !== 0;
+}
+
+
+
+/**
  * A comparison function to sort networks ordered by signal strength.
  *
  * @private
@@ -131,14 +147,23 @@ function parse_cell(cell) {
  * @param {function} callback The callback function.
  *
  */
-function parse_scan(callback) {
+function parse_scan(show_hidden, callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
-    else callback(error, stdout
-      .split(/Cell [0-9]+ -/)
-      .map(parse_cell)
-      .filter(has_ssid)
-      .sort(by_signal));
+    else
+      if (show_hidden) {
+        callback(error, stdout
+        .split(/Cell [0-9]+ -/)
+        .map(parse_cell)
+        .filter(has_keys)
+        .sort(by_signal));
+    } else {
+        callback(error, stdout
+        .split(/Cell [0-9]+ -/)
+        .map(parse_cell)
+        .filter(has_ssid)
+        .sort(by_signal));
+    }
   };
 }
 
@@ -156,6 +181,10 @@ function parse_scan(callback) {
  * var iwlist = require('wireless-tools/iwlist');
  *
  * iwlist.scan('wlan0', function(err, networks) {
+ *   console.log(networks);
+ * });
+ *
+ * iwlist.scan({ iface : 'wlan0', show_hidden: true }, function(err, networks) {
  *   console.log(networks);
  * });
  *
@@ -203,7 +232,67 @@ function parse_scan(callback) {
  *   }
  * ]
  *
+  * [
+ *   {
+ *     address: '00:0b:81:ab:14:22',
+ *     ssid: 'BlueberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wpa',
+ *     quality: 48,
+ *     signal: 87
+ *   },
+ *   {
+ *     address: '00:0b:81:95:12:21',
+ *     ssid: 'RaspberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wpa2',
+ *     quality: 58,
+ *     signal: 83
+ *   },
+ *   {
+ *     address: '00:0b:81:cd:f2:04',
+ *     ssid: 'BlackberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'wep',
+ *     quality: 48,
+ *     signal: 80
+ *   },
+ *   {
+ *     address: '00:0b:81:fd:42:14',
+ *     ssid: 'CranberryPi',
+ *     mode: 'master',
+ *     frequency: 2.437,
+ *     channel: 6,
+ *     security: 'open',
+ *     quality: 32,
+ *     signal: 71
+ *   },
+ *   {
+ *     address: '2c:c5:d3:02:ae:4c',
+ *     channel: 100,
+ *     frequency: 5.5,
+ *     mode: 'master',
+ *     quality: 66,
+ *     signal: -44,
+ *     security: 'wpa2'
+ *   }
+ * ]
+ *
  */
-function scan(interface, callback) {
-  this.exec('iwlist ' + interface + ' scan', parse_scan(callback));  
+function scan(options, callback) {
+  if (typeof options === 'string') {
+    interface = options;
+    show_hidden = false;
+  } else {
+    interface = options.iface;
+    show_hidden = options.show_hidden || false;
+  }
+
+  this.exec('iwlist ' + interface + ' scan', parse_scan(show_hidden, callback));
 }

@@ -17,7 +17,7 @@
   - [iwconfig.status(callback)](#iwconfigstatuscallback) - status of all wireless network interfaces
   - [iwconfig.status(interface, callback)](#iwconfigstatusinterface-callback) - status of a wireless network interface
 - [iwlist](#iwlist) - query wireless network interfaces
-  - [iwlist.scan(interface, callback)](#iwlistscaninterface-callback) - scan for wireless networks
+  - [iwlist.scan(options, callback)](#iwlistscaninterface-callback) - scan for wireless networks
 - [udhcpc](#udhcpc) - configure a dhcp client
   - [udhcpc.enable(options, callback)](#udhcpcenableoptions-callback) - start a dhcp client
   - [udhcpc.disable(interface, callback)](#udhcpcdisableinterface-callback) - stop a dhcp client
@@ -163,7 +163,7 @@ var options = {
 };
 
 ifconfig.up(options, function(err) {
-  // the interface is up 
+  // the interface is up
 });
 ```
 
@@ -245,6 +245,10 @@ iwlist.scan('wlan0', function(err, networks) {
   console.log(networks);
 });
 
+iwlist.scan({ iface : 'wlan0', show_hidden : true }, function(err, networks) {
+  console.log(networks);
+});
+
 // =>
 [
   {
@@ -286,6 +290,58 @@ iwlist.scan('wlan0', function(err, networks) {
     security: 'open',
     quality: 32,
     signal: 71
+  }
+]
+
+[
+  {
+    address: '00:0b:81:ab:14:22',
+    ssid: 'BlueberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wpa',
+    quality: 48,
+    signal: 87
+  },
+  {
+    address: '00:0b:81:95:12:21',
+    ssid: 'RaspberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wpa2',
+    quality: 58,
+    signal: 83
+  },
+  {
+    address: '00:0b:81:cd:f2:04',
+    ssid: 'BlackberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'wep',
+    quality: 48,
+    signal: 80
+  },
+  {
+    address: '00:0b:81:fd:42:14',
+    ssid: 'CranberryPi',
+    mode: 'master',
+    frequency: 2.437,
+    channel: 6,
+    security: 'open',
+    quality: 32,
+    signal: 71
+  },
+  {
+    address: '2c:c5:d3:02:ae:4c',
+    channel: 100,
+    frequency: 5.5,
+    mode: 'master',
+    quality: 66,
+    signal: -44,
+    security: 'wpa2'
   }
 ]
 ```

@@ -71,8 +71,23 @@ var IWLIST_SCAN_LINUX = [
 '          Bit Rates:144 Mb/s',
 '          IE: Unknown: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
 '          Quality=32/100  Signal level=71/100',
-'Cell 05 - Address: 00:0B:81:ED:E2:44',
-'          ESSID:""'
+'Cell 05 - Address: 2C:C5:D3:02:AE:4C',
+'          Channel:100',
+'          Frequency:5.5 GHz (Channel 100)',
+'          Quality=65/70  Signal level=-45 dBm',
+'          Encryption key:on',
+'          ESSID:""',
+'          Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s',
+'          Mode:Master',
+'          Extra:tsf=0000003d2a54d03b',
+'          Extra: Last beacon: 3360ms ago',
+'          IE: Unknown: DD180050F20201018E0003A4000027A4000042435E0062322F00',
+'          IE: Unknown: 2D1AAD091BF8FE000000000000000000001000000000000000000000',
+'          IE: Unknown: 3D1664000000000000000000000000000000000000000000',
+'          IE: IEEE 802.11i/WPA2 Version 1',
+'              Group Cipher : CCMP',
+'              Pairwise Ciphers (1) : CCMP',
+'              Authentication Suites (1) : PSK'
 ].join('\n');
 
 describe('iwlist', function() {
@@ -126,6 +141,75 @@ describe('iwlist', function() {
             signal: 71
           }
         ]);
+
+        done();
+      });
+    })
+
+    it('should scan the specified interface and show hidden ssid networks', function(done) {
+      iwlist.exec = function(command, callback) {
+        should(command).eql('iwlist wlan0 scan');
+        callback(null, IWLIST_SCAN_LINUX, '');
+      };
+
+      var options = {
+        iface: 'wlan0',
+        show_hidden: true
+      };
+
+      iwlist.scan(options, function(err, status) {
+        should(status).eql(
+          [
+          {
+            address: '00:0b:81:ab:14:22',
+            channel: 6,
+            frequency: 2.437,
+            mode: 'master',
+            quality: 48,
+            signal: 87,
+            ssid: 'BlueberryPi',
+            security: 'wpa'
+          },
+          {
+            address: '00:0b:81:95:12:21',
+            channel: 6,
+            frequency: 2.437,
+            mode: 'master',
+            quality: 58,
+            signal: 83,
+            ssid: 'RaspberryPi',
+            security: 'wpa2'
+          },
+          {
+            address: '00:0b:81:cd:f2:04',
+            channel: 6,
+            frequency: 2.437,
+            mode: 'master',
+            quality: 48,
+            signal: 80,
+            ssid: 'BlackberryPi',
+            security: 'wep'
+          },
+          {
+            address: '00:0b:81:fd:42:14',
+            channel: 6,
+            frequency: 2.437,
+            mode: 'master',
+            quality: 32,
+            signal: 71,
+            ssid: 'CranberryPi',
+            security: 'open'
+          },
+          {
+            address: '2c:c5:d3:02:ae:4c',
+            channel: 100,
+            frequency: 5.5,
+            mode: 'master',
+            quality: 65,
+            signal: -45,
+            security: 'wpa2'
+          }
+          ]);
 
         done();
       });
