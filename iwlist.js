@@ -294,5 +294,11 @@ function scan(options, callback) {
     show_hidden = options.show_hidden || false;
   }
 
-  this.exec('iwlist ' + interface + ' scan', parse_scan(show_hidden, callback));
+  var extra_params = '';
+
+  if (options.ssid) {
+    extra_params = ' essid ' + options.ssid;
+  }
+
+  this.exec('iwlist ' + interface + ' scan' + extra_params, parse_scan(show_hidden, callback));
 }
