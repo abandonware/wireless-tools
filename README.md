@@ -24,9 +24,20 @@
 - [udhcpd](#udhcpd) - configure a dhcp server
   - [udhcpd.enable(options, callback)](#udhcpdenableoptions-callback) - start a dhcp server
   - [udhcpd.disable(interface, callback)](#udhcpddisableinterface-callback) - stop a dhcp server
+- [wpa_cli](#wpa_cli) - send commands to wpasupplicant using wpa_cli
+  - [wpa_cli.status(interface, callback)](#wpa_clistatusinterface-callback) - get status of wpa
+  - [wpa_cli.bssid(interface, ap, ssid, callback)](#wpa_clibssidinterface-ap-ssid-callback) - set preferred bssid for ssid
+  - [wpa_cli.reassociate(interface, callback)](#wpa_clireassociateinterface-callback) - tell wpasupplicant to reassociate to an APs
+  - [wpa_cli.set(interface, variable, value, callback)](#wpa_clisetinterface-variable-value-callback) - set variable to value
+  - [wpa_cli.add_network(interface, callback)](#wpa_cliadd_networkinterface-callback) - add network
+  - [wpa_cli.set_network(interface, id, variable, value, callback)](#wpa_cliset_networkinterface-id-variable-value-callback) - set network variables
+  - [wpa_cli.enable_network(interface, id, callback)](#wpa_clienable_networkinterface-id-callback) - enable network
+  - [wpa_cli.disable_network(interface, id, callback)](#wpa_clidisable_networkinterface-id-callback) - disable network
+  - [wpa_cli.remove_network(interface, id, callback)](#wpa_cliremove_networkinterface-id-callback) - disable network
 - [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
   - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
   - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
+  - [wpa_supplicant.manual(options, callback)](#wpa_supplicantmanualoptions-callback) - start wpasupplicat in a way it can receive commands from wpa_cli
 
 # hostapd
 The **hostapd** command is used to configure wireless access points.
@@ -411,6 +422,88 @@ udhcpd.disable('wlan0', function(err) {
 });
 ```
 
+# wpa_cli
+The **wpa_cli** command is used to setup what wpasupplicant must do to connect to a wireless network connection for a network interface.
+
+Most of wpa_cli commands only return 'OK' or 'FAIL' (and exist status is always 0). I wrapped 'FAIL' so it will return and call callback with an error in such case.
+
+'OK' result only means than wpasupplicant had received the command. A polling must be done to wpa_supplicant (or using other tools like iwconfig) to be sure that the command was actually applied by wpasupplicant.
+
+## wpa_cli.status(interface, callback)
+The **wpa_cli status** is used to get the current status of wpasupplicant on a specific network interface.
+
+## wpa_cli.bssid(interface, ap, ssid, callback)
+The **wpa_cli bssid** is used to set the preferred APs for an specific ssid on a specific network interface.
+
+## wpa_cli.reassociate(interface, callback)
+The **wpa_cli reassociate** is used to instruct wpasupplicant to reassociate to APs for a ssid on a specific network interface.
+
+## wpa_cli.set(interface, variable, value, callback)
+The **wpa_cli set** is used to set wpassuplicant parameters to a value on a specific network interface.
+
+## wpa_cli.add_network(interface, callback)
+The **wpa_cli add_network** is used to create a new network entry on a specific network interface.
+It will return on success the id of the new network
+
+## wpa_cli.set_network(interface, id, variable, value, callback)
+The **wpa_cli set_network** is used to set variables for a network on a specific network interface.
+
+## wpa_cli.enable_network(interface, id, callback)
+The **wpa_cli enable_network** is used to enable a network on a specific network interface.
+
+## wpa_cli.disable_network(interface, id, callback)
+The **wpa_cli disable_network** is used to disable a network on a specific network interface.
+
+## wpa_cli.remove_network(interface, id, callback)
+The **wpa_cli remove_network** is used to remove a network on a specific network interface.
+
+
+## Example of the methods tested so far (status, bssid, reassociate)
+
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+
+wpa_cli.status('wlan0', function(err, status) {
+  console.dir(status);
+  wpa_cli.bssid('wlan0', '2c:f5:d3:02:ea:dd', 'Fake-Wifi', function(err, data){
+    console.dir(data);
+    wpa_cli.bssid('wlan0', 'Fake-Wifi', '2c:f5:d3:02:ea:dd', function(err, data){
+      if (err) {
+        console.dir(err);
+        wpa_cli.reassociate('wlan0', function(err, data) {
+          console.dir(data);
+        });
+      }
+    });
+  );
+});
+
+
+// =>
+{
+    bssid: '2c:f5:d3:02:ea:d9',
+    frequency: 2412,
+    mode: 'station',
+    key_mgmt: 'wpa2-psk',
+    ssid: 'Fake-Wifi',
+    pairwise_cipher: 'CCMP',
+    group_cipher: 'CCMP',
+    p2p_device_address: 'e4:28:9c:a8:53:72',
+    wpa_state: 'COMPLETED',
+    ip: '10.34.141.168',
+    mac: 'e4:28:9c:a8:53:72',
+    uuid: 'e1cda789-8c88-53e8-ffff-31c304580c1e',
+    id: 0
+}
+
+OK
+
+FAIL
+
+OK
+
+```
+
 # wpa_supplicant
 The **wpa_supplicant** command is used to configure a wireless network connection for a network interface.
 
@@ -440,5 +533,21 @@ var wpa_supplicant = require('wireless-tools/wpa_supplicant');
 
 wpa_supplicant.disable('wlan0', function(err) {
   // disconnected from wireless network
+});
+```
+
+## wpa_supplicant.manual(options, callback)
+The **wpa_supplicant manual** command is used to taunch wpasupplicant on a specific network interface.
+
+``` javascript
+var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+
+var options = {
+  interface: 'wlan0',
+  drivers: [ 'nl80211', 'wext' ]
+};
+
+wpa_supplicant.manula(options, function(err) {
+  // wpasupplicant launched on wlan0 interface (can be setup using wpa_cli)
 });
 ```
