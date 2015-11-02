@@ -66,6 +66,7 @@ var WPA_CLI_STATUS_SCANNING = [
 
 var WPA_CLI_COMMAND_OK = 'OK\n';
 var WPA_CLI_COMMAND_FAIL = 'FAIL\n';
+var WPA_CLI_COMMAND_ID = '0\n';
 
 describe('wpa_cli', function() {
     describe('wpa_cli.status(iface, callback)', function() {
@@ -225,6 +226,246 @@ describe('wpa_cli', function() {
             };
 
             wpa_cli.reassociate('wlan0', function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.set(iface, variable, value, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 set ap_scan 1');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.set('wlan0','ap_scan', 1, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 set ap_scan 1');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+           wpa_cli.set('wlan0','ap_scan', 1, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.set('wlan0','ap_scan', 1, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.add_network(iface, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 add_network');
+                callback(null, WPA_CLI_COMMAND_ID);
+            };
+
+            wpa_cli.add_network('wlan0', function(err, status) {
+                should(status).eql({
+                    result: '0'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 add_network');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.add_network('wlan0', function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.add_network('wlan0', function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.set_network(iface, id, variable, value, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 set_network 0 scan_ssid 1');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.set_network('wlan0', 0, 'scan_ssid', 1, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 set_network 0 fake_variable 1');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.set_network('wlan0', 0, 'fake_variable', 1, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.set_network('wlan0', 0, 'fake_variable', 1, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.enable_network(iface, id, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 enable_network 0');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.enable_network('wlan0', 0, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 enable_network 28');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.enable_network('wlan0', 28, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.enable_network('wlan0', 28, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.disable_network(iface, id, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 disable_network 0');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.disable_network('wlan0', 0, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 disable_network 28');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.disable_network('wlan0', 28, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.disable_network('wlan0', 28, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.remove_network(iface, id, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 remove_network 0');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.remove_network('wlan0', 0, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 remove_network 28');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.remove_network('wlan0', 28, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.remove_network('wlan0', 28, function(err, status) {
                 should(err).eql('error');
                 done();
             });
