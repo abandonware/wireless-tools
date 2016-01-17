@@ -49,7 +49,7 @@ function parse_status_block(block) {
   var match;
 
   // Skip out of the block is invalid
-  // if (!block) return;
+  if (!block) return;
 
   var parsed = {
     interface: block.match(/^([^\s]+)/)[1]
