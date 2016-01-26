@@ -172,11 +172,11 @@ function parse_status_interface(callback) {
  *
  */
 function status(interface, callback) {
-  if (callback) {
+  if (interface) {
     return this.exec('iwconfig ' + interface,
       parse_status_interface(callback));  
   }
   else {
-    return this.exec('iwconfig', parse_status(interface));  
+    return this.exec('iwconfig', parse_status(callback));  
   }
 }
