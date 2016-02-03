@@ -77,6 +77,7 @@ function by_signal(a, b) {
  */
 function parse_cell(cell) {
   var parsed = { };
+  var match;
 
   if ((match = cell.match(/Address\s*[:|=]\s*([A-Fa-f0-9:]{17})/))) {
     parsed.address = match[1].toLowerCase();
