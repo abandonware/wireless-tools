@@ -103,6 +103,10 @@ function parse_cell(cell) {
     parsed.signal = parseInt(match[1], 10);
   }
 
+  if ((match = cell.match(/Noise level\s*[:|=]\s*(-?[0-9]+)/))) {
+    parsed.noise = parseInt(match[1], 10);
+  }
+
   if ((match = cell.match(/ESSID\s*[:|=]\s*"([^"]+)"/))) {
     parsed.ssid = match[1];
   }
