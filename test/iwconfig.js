@@ -59,6 +59,19 @@ var IWCONFIG_STATUS_INTERFACE_LINUX = [
   ''
 ].join('\n');
 
+var IWCONFIG_STATUS_INTERFACE_LINUX2 = [
+  'wlan0     IEEE 802.11abgn  ESSID:"FAKE-Wifi"',
+  '          Mode:Managed  Frequency:2.412 GHz  Access Point: 00:0B:81:95:12:21',
+  '          Bit Rate=36 Mb/s   Tx-Power=22 dBm',
+  '          Retry short limit:7   RTS thr:off   Fragment thr:off',
+  '          Encryption key:off',
+  '          Power Management:on',
+  '          Link Quality=63/70 Signal level=-47 dBm',
+  '          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0',
+  '          Tx excessive retries:0  Invalid misc:0   Missed beacon:0',
+  ''
+].join('\n');
+
 describe('iwconfig', function() {
   describe('iwconfig.status(callback)', function() {
     it('should get the status for each interface', function(done) {
@@ -131,6 +144,41 @@ describe('iwconfig', function() {
           quality: 18,
           signal: 11,
           noise: 0
+        });
+
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      iwconfig.exec = function(command, callback) {
+        callback('error');
+      };
+
+      iwconfig.status('wlan0', function(err, status) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
+
+  describe('iwconfig.status(interface, callback)', function() {
+    it('should get the status for the specified interface', function(done) {
+      iwconfig.exec = function(command, callback) {
+        should(command).eql('iwconfig wlan0');
+        callback(null, IWCONFIG_STATUS_INTERFACE_LINUX2, '');
+      };
+
+      iwconfig.status('wlan0', function(err, status) {
+        should(status).eql({
+          interface: 'wlan0',
+          ssid: 'FAKE-Wifi',
+          access_point: '00:0b:81:95:12:21',
+          ieee: '802.11abgn',
+          mode: 'managed',
+          frequency: 2.412,
+          quality: 63,
+          signal: -47
         });
 
         done();

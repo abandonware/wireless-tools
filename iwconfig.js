@@ -80,7 +80,7 @@ function parse_status_block(block) {
     parsed.sensitivity = parseInt(match[1], 10);
   }
 
-  if ((match = block.match(/Signal level[:|=]\s*([0-9]+)/))) {
+  if ((match = block.match(/Signal level[:|=]\s*([-]{0,1}[0-9]+)/))) {
     parsed.signal = parseInt(match[1], 10);
   }
 
@@ -174,9 +174,9 @@ function parse_status_interface(callback) {
 function status(interface, callback) {
   if (callback) {
     return this.exec('iwconfig ' + interface,
-      parse_status_interface(callback));  
+      parse_status_interface(callback));
   }
   else {
-    return this.exec('iwconfig', parse_status(interface));  
+    return this.exec('iwconfig', parse_status(interface));
   }
 }

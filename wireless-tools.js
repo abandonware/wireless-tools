@@ -28,5 +28,6 @@ var wireless_tools = module.exports = {
   iwlist: require('./iwlist'),
   udhcpc: require('./udhcpc'),
   udhcpd: require('./udhcpd'),
+  wpa: require('./wpa_cli'),
   wpa_supplicant: require('./wpa_supplicant')
 };

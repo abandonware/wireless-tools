@@ -29,7 +29,7 @@ describe('wpa_supplicant', function() {
     it('should stop the daemons', function(done) {
       wpa_supplicant.exec = function(command, callback) {
         should(command).eql(
-          'kill `pgrep -f "^wpa_supplicant -i wlan0"` || true');
+          'kill `pgrep -f "wpa_supplicant .* -i wlan0"` || true');
 
         callback(null, '', '');
       };
@@ -89,6 +89,45 @@ describe('wpa_supplicant', function() {
       };
 
       wpa_supplicant.enable(options, function(err) {
+        should(err).eql('error');
+        done();
+      });
+    })
+  })
+
+  describe('wpa_supplicant.manual(options, callback)', function() {
+    it('should start the daemon', function(done) {
+      wpa_supplicant.exec = function(command, callback) {
+        should(command).eql([
+          'wpa_supplicant -s -B -P /run/wpa_supplicant/wlan0.pid',
+          '-i wlan0 -D nl80211,wext -C /run/wpa_supplicant'
+          ].join(' '));
+
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        drivers: [ 'nl80211', 'wext' ]
+      };
+
+      wpa_supplicant.manual(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should handle errors', function(done) {
+      wpa_supplicant.exec = function(command, callback) {
+        callback('error');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        drivers: [ 'nl80211', 'wext' ]
+      };
+
+      wpa_supplicant.manual(options, function(err) {
         should(err).eql('error');
         done();
       });
