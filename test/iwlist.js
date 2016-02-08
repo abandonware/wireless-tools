@@ -258,16 +258,6 @@ describe('iwlist', function() {
             security: 'wep'
           },
           {
-            address: '00:0b:81:fd:42:14',
-            channel: 6,
-            frequency: 2.437,
-            mode: 'master',
-            quality: 32,
-            signal: 71,
-            ssid: 'CranberryPi',
-            security: 'open'
-          },
-          {
             address: '2c:c5:d3:02:ae:4c',
             channel: 100,
             frequency: 5.5,
@@ -275,6 +265,17 @@ describe('iwlist', function() {
             quality: 65,
             signal: -45,
             security: 'wpa2'
+          },
+          {
+            address: '00:0b:81:fd:42:14',
+            channel: 6,
+            frequency: 2.437,
+            mode: 'master',
+            quality: 4,
+            signal: -60,
+            noise: -92,
+            ssid: 'CranberryPi',
+            security: 'open'
           }
           ]);
 
