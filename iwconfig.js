@@ -68,7 +68,7 @@ function parse_status_block(block) {
     parsed.mode = match[1].toLowerCase();
   }
 
-  if ((match = block.match(/Noise level[:|=]\s*([0-9]+)/))) {
+  if ((match = block.match(/Noise level[:|=]\s*(-?[0-9]+)/))) {
     parsed.noise = parseInt(match[1], 10);
   }
 
@@ -80,7 +80,7 @@ function parse_status_block(block) {
     parsed.sensitivity = parseInt(match[1], 10);
   }
 
-  if ((match = block.match(/Signal level[:|=]\s*([-]{0,1}[0-9]+)/))) {
+  if ((match = block.match(/Signal level[:|=]\s*(-?[0-9]+)/))) {
     parsed.signal = parseInt(match[1], 10);
   }
 
