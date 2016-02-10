@@ -291,12 +291,13 @@ function parse_scan(show_hidden, callback) {
  *
  */
 function scan(options, callback) {
+  var interface, show_hidden
   if (typeof options === 'string') {
-    interface = options;
-    show_hidden = false;
+    var interface = options;
+    var show_hidden = false;
   } else {
-    interface = options.iface;
-    show_hidden = options.show_hidden || false;
+    var interface = options.iface;
+    var show_hidden = options.show_hidden || false;
   }
 
   var extra_params = '';
