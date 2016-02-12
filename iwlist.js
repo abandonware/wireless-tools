@@ -76,6 +76,7 @@ function by_signal(a, b) {
  *
  */
 function parse_cell(cell) {
+  var match;
   var parsed = { };
 
   if ((match = cell.match(/Address\s*[:|=]\s*([A-Fa-f0-9:]{17})/))) {
