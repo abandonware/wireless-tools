@@ -1,12 +1,16 @@
 language: node_js
+sudo: false
 
 node_js:
   - "0.10"
   - "0.11"
+  - "0.12"
+  - "5.4"
 
-branches:
-  only:
-    - master
+env:
+  - CODECLIMATE_REPO_TOKEN=50a1d193d48be18ed66fdf29bf7b881fc7a8ba136959391877b2046938c5045e
 
-script:
-  - if [[ `node --version` == *v0.10* ]]; then npm run-script coveralls; else npm test; fi
+after_success:
+  - npm run-script coverage
+  - npm run-script codeclimate
+
