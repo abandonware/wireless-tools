@@ -48,6 +48,9 @@ var iwconfig = module.exports = {
 function parse_status_block(block) {
   var match;
 
+  // Skip out of the block is invalid
+  if (!block) return;
+
   var parsed = {
     interface: block.match(/^([^\s]+)/)[1]
   };
@@ -108,7 +111,7 @@ function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
     else callback(error,
-      stdout.trim().split('\n\n').map(parse_status_block));
+      stdout.trim().split('\n\n').map(parse_status_block).filter(function(i) { return !! i }));
   };
 }
 

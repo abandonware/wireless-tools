@@ -1,8 +1,13 @@
 # Wireless tools for Node.js
-[![Release Version](https://img.shields.io/badge/version-0.14.1-blue.svg)](https://github.com/bakerface/wireless-tools)
-[![Build Status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
-[![Coverage Status](https://coveralls.io/repos/bakerface/wireless-tools/badge.svg?branch=master)](https://coveralls.io/r/bakerface/wireless-tools)
-[![Downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
+[![npm version](https://badge.fury.io/js/wireless-tools.svg)](http://badge.fury.io/js/wireless-tools)
+[![release version](https://img.shields.io/badge/version-0.15.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![build status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
+[![code climate](https://codeclimate.com/github/bakerface/wireless-tools/badges/gpa.svg)](https://codeclimate.com/github/bakerface/wireless-tools)
+[![test coverage](https://codeclimate.com/github/bakerface/wireless-tools/badges/coverage.svg)](https://codeclimate.com/github/bakerface/wireless-tools/coverage)
+[![github issues](https://img.shields.io/github/issues/bakerface/wireless-tools.svg)](https://github.com/bakerface/wireless-tools/issues)
+[![dependencies](https://david-dm.org/bakerface/wireless-tools.svg)](https://david-dm.org/bakerface/wireless-tools)
+[![dev dependencies](https://david-dm.org/bakerface/wireless-tools/dev-status.svg)](https://david-dm.org/bakerface/wireless-tools#info=devDependencies)
+[![downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
 
 ## Table of Contents
 - [hostapd](#hostapd) - configure an access point
