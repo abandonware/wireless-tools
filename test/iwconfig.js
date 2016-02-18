@@ -34,6 +34,8 @@ var IWCONFIG_STATUS_LINUX = [
   '          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0',
   '          Tx excessive retries:0  Invalid misc:0   Missed beacon:0',
   '',
+  '',
+  '',
   'wlan1     unassociated  Nickname:"<WIFI@REALTEK>"',
   '          Mode:Auto  Frequency=2.412 GHz  Access Point: Not-Associated',
   '          Sensitivity:0/0',
