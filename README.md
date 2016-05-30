@@ -430,20 +430,20 @@ udhcpd.disable('wlan0', function(err) {
 ```
 
 # wpa_cli
-The **wpa_cli** command is used to setup what wpa_supplianct must do to connect to a wireless network connection for a network interface.
+The **wpa_cli** command is used to setup what wpa_supplicant must do to connect to a wireless network connection for a network interface.
 
 Most of wpa_cli commands only return 'OK' or 'FAIL' (and exist status is always 0). I wrapped 'FAIL' so it will return and call callback with an error in such case.
 
-'OK' result only means than wpa_supplianct had received the command. A polling must be done to wpa_supplicant (or using other tools like iwconfig) to be sure that the command was actually applied by wpa_supplianct.
+'OK' result only means than wpa_supplicant had received the command. A polling must be done to wpa_supplicant (or using other tools like iwconfig) to be sure that the command was actually applied by wpa_supplicant.
 
 ## wpa_cli.status(interface, callback)
-The **wpa_cli status** is used to get the current status of wpa_supplianct on a specific network interface.
+The **wpa_cli status** is used to get the current status of wpa_supplicant on a specific network interface.
 
 ## wpa_cli.bssid(interface, ap, ssid, callback)
 The **wpa_cli bssid** is used to set the preferred APs for an specific ssid on a specific network interface.
 
 ## wpa_cli.reassociate(interface, callback)
-The **wpa_cli reassociate** is used to instruct wpa_supplianct to reassociate to APs for a ssid on a specific network interface.
+The **wpa_cli reassociate** is used to instruct wpa_supplicant to reassociate to APs for a ssid on a specific network interface.
 
 ## wpa_cli.set(interface, variable, value, callback)
 The **wpa_cli set** is used to set wpa_supplicant parameters to a value on a specific network interface.
@@ -544,7 +544,7 @@ wpa_supplicant.disable('wlan0', function(err) {
 ```
 
 ## wpa_supplicant.manual(options, callback)
-The **wpa_supplicant manual** command is used to taunch wpa_supplianct on a specific network interface.
+The **wpa_supplicant manual** command is used to taunch wpa_supplicant on a specific network interface.
 
 ``` javascript
 var wpa_supplicant = require('wireless-tools/wpa_supplicant');
@@ -554,7 +554,7 @@ var options = {
   drivers: [ 'nl80211', 'wext' ]
 };
 
-wpa_supplicant.manula(options, function(err) {
-  // wpa_supplianct launched on wlan0 interface (can be setup using wpa_cli)
+wpa_supplicant.manual(options, function(err) {
+  // wpa_supplicant launched on wlan0 interface (can be setup using wpa_cli)
 });
 ```
