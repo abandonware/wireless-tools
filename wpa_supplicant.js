@@ -34,7 +34,8 @@ var child_process = require('child_process');
 var wpa_supplicant = module.exports = {
   exec: child_process.exec,
   disable: disable,
-  enable: enable
+  enable: enable,
+  manual: manual
 };
 
 /**
@@ -51,13 +52,13 @@ var wpa_supplicant = module.exports = {
  * var wpa_supplicant = require('wireless-tools/wpa_supplicant');
  *
  * wpa_supplicant.disable('wlan0', function(err) {
- *   // disconnected from wireless network 
+ *   // disconnected from wireless network
  * });
  *
  */
 function disable(interface, callback) {
-  var command = 'kill `pgrep -f "^wpa_supplicant -i '
-    + interface + '"` || true';
+  var command = 'kill `pgrep -f "wpa_supplicant .* -i ' +
+    interface + '"` || true';
 
   return this.exec(command, callback);
 }
@@ -83,7 +84,7 @@ function disable(interface, callback) {
  * };
  *
  * wpa_supplicant.enable(options, function(err) {
- *   // connected to the wireless network 
+ *   // connected to the wireless network
  * });
  *
  */
@@ -94,5 +95,29 @@ function enable(options, callback) {
     + '" > ' + file + ' && wpa_supplicant -i ' + options.interface + ' -B -D '
     + options.driver + ' -c ' + file + ' && rm -f ' + file;
 
-  return this.exec(command, callback);  
+  return this.exec(command, callback);
 }
+
+/**
+ * launchs wpa manually (as if it were launched by ifup if interface wpa setup was done in /network/interfaces)
+ * /sbin/wpa_supplicant -s -B -P /run/wpa_supplicant.wlan0.pid -i wlan0 -D nl80211,wext -C /run/wpa_supplicant
+ * options = {
+ *     interface: 'wlan0',
+ *     drivers: [ 'nl80211', 'wext' ]
+ * }
+ */
+function manual(options, callback) {
+  var command = [
+    'wpa_supplicant -s -B -P',
+    [ '/run/wpa_supplicant/', options.interface, '.pid'].join(''),
+    '-i',
+    options.interface,
+    '-D',
+    options.drivers.join(),
+    '-C /run/wpa_supplicant'
+  ].join(' ');
+
+  return this.exec(command, callback);
+}
+
+
