@@ -2,16 +2,10 @@
   "name": "wireless-tools",
   "version": "0.15.0",
   "description": "Wireless tools for Node.js",
+  "author": "Christopher M. Baker",
+  "license": "MIT",
+  "homepage": "https://github.com/bakerface/wireless-tools",
   "main": "wireless-tools.js",
-  "scripts": {
-    "test": "istanbul cover --report html node_modules/.bin/_mocha",
-    "coverage": "istanbul cover --report lcovonly node_modules/.bin/_mocha",
-    "codeclimate": "codeclimate-test-reporter < coverage/lcov.info"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bakerface/wireless-tools.git"
-  },
   "keywords": [
     "wireless",
     "tools",
@@ -23,16 +17,26 @@
     "udhcpd",
     "wpa_supplicant"
   ],
-  "author": "Christopher M. Baker",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bakerface/wireless-tools.git"
+  },
   "bugs": {
     "url": "https://github.com/bakerface/wireless-tools/issues"
   },
-  "homepage": "https://github.com/bakerface/wireless-tools",
+  "scripts": {
+    "test": "istanbul cover node_modules/.bin/_mocha",
+    "posttest": "istanbul check-coverage --statements 100 --functions 100 --branches 100 --lines 100",
+    "codeclimate": "codeclimate-test-reporter < coverage/lcov.info"
+  },
+  "xo": {
+    "space": true
+  },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.3.1",
-    "istanbul": "^0.4.2",
-    "mocha": "^2.4.5",
-    "should": "^8.2.2"
+    "istanbul": "^0.4.3",
+    "mocha": "^2.5.3",
+    "should": "^8.4.0",
+    "xo": "^0.15.1"
   }
 }
