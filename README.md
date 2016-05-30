@@ -1,6 +1,6 @@
 # Wireless tools for Node.js
 [![npm version](https://badge.fury.io/js/wireless-tools.svg)](http://badge.fury.io/js/wireless-tools)
-[![release version](https://img.shields.io/badge/version-0.15.0-blue.svg)](https://github.com/bakerface/wireless-tools)
+[![release version](https://img.shields.io/badge/version-0.16.0-blue.svg)](https://github.com/bakerface/wireless-tools)
 [![build status](https://travis-ci.org/bakerface/wireless-tools.svg?branch=master)](https://travis-ci.org/bakerface/wireless-tools)
 [![code climate](https://codeclimate.com/github/bakerface/wireless-tools/badges/gpa.svg)](https://codeclimate.com/github/bakerface/wireless-tools)
 [![test coverage](https://codeclimate.com/github/bakerface/wireless-tools/badges/coverage.svg)](https://codeclimate.com/github/bakerface/wireless-tools/coverage)

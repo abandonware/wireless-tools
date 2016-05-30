@@ -1,6 +1,6 @@
 {
   "name": "wireless-tools",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Wireless tools for Node.js",
   "author": "Christopher M. Baker",
   "license": "MIT",
