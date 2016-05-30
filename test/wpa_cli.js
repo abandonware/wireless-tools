@@ -24,6 +24,8 @@
 var should = require('should');
 var wpa_cli = require('../wpa_cli');
 
+var WPA_CLI_STATUS_SILENCE = '';
+
 var WPA_CLI_STATUS_COMPLETED = [
     'bssid=2c:f5:d3:02:ea:d9',
     'freq=2412',
@@ -78,6 +80,15 @@ describe('wpa_cli', function() {
                 should(command).eql('wpa_cli -i wlan0 status');
                 callback(null, self.OUTPUT);
             };
+        });
+
+        it('status SILENCE', function (done) {
+          this.OUTPUT = WPA_CLI_STATUS_SILENCE;
+
+          wpa_cli.status('wlan0', function(err, status) {
+            should(status).eql({ });
+            done();
+          });
         });
 
         it('status COMPLETED', function(done) {
