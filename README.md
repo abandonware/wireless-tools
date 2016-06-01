@@ -439,12 +439,60 @@ Most of wpa_cli commands only return 'OK' or 'FAIL' (and exist status is always 
 ## wpa_cli.status(interface, callback)
 The **wpa_cli status** is used to get the current status of wpa_supplicant on a specific network interface.
 
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+
+wpa_cli.status('wlan0', function(err, status) {
+    console.dir(status);
+});
+```
+
+``` javascript
+// =>
+{
+    bssid: '2c:f5:d3:02:ea:d9',
+    frequency: 2412,
+    mode: 'station',
+    key_mgmt: 'wpa2-psk',
+    ssid: 'Fake-Wifi',
+    pairwise_cipher: 'CCMP',
+    group_cipher: 'CCMP',
+    p2p_device_address: 'e4:28:9c:a8:53:72',
+    wpa_state: 'COMPLETED',
+    ip: '10.34.141.168',
+    mac: 'e4:28:9c:a8:53:72',
+    uuid: 'e1cda789-8c88-53e8-ffff-31c304580c1e',
+    id: 0
+}
+```
 ## wpa_cli.bssid(interface, ap, ssid, callback)
 The **wpa_cli bssid** is used to set the preferred APs for an specific ssid on a specific network interface.
 
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+
+wpa_cli.bssid('wlan0', '2c:f5:d3:02:ea:dd', 'Fake-Wifi', function(err, data){
+    // this is correct usage
+    console.dir(data);
+});
+```
 ## wpa_cli.reassociate(interface, callback)
 The **wpa_cli reassociate** is used to instruct wpa_supplicant to reassociate to APs for a ssid on a specific network interface.
 
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+
+wpa_cli.bssid('wlan0', 'Fake-Wifi', '2c:f5:d3:02:ea:dd', function(err, data){
+      // our usage is wrong so an error is triggered
+      if (err) {
+        console.dir(err);
+        // attempt to reassociate
+        wpa_cli.reassociate('wlan0', function(err, data) {
+          console.dir(data);
+        });
+      }
+});
+```
 ## wpa_cli.set(interface, variable, value, callback)
 The **wpa_cli set** is used to set wpa_supplicant parameters to a value on a specific network interface.
 
@@ -464,51 +512,59 @@ The **wpa_cli disable_network** is used to disable a network on a specific netwo
 ## wpa_cli.remove_network(interface, id, callback)
 The **wpa_cli remove_network** is used to remove a network on a specific network interface.
 
-
-## Example of the methods tested so far (status, bssid, reassociate)
+## wpa_cli.select_network(interface, id, callback)
+The **wpa_cli select_network** is used to select a specific network on a specific network interface and
+disable all others.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
 
-wpa_cli.status('wlan0', function(err, status) {
-  console.dir(status);
-  wpa_cli.bssid('wlan0', '2c:f5:d3:02:ea:dd', 'Fake-Wifi', function(err, data){
-    console.dir(data);
-    wpa_cli.bssid('wlan0', 'Fake-Wifi', '2c:f5:d3:02:ea:dd', function(err, data){
-      if (err) {
+wpa_cli.select_network('wlan0', 0, function(err, data){
+    if (err) {
+        // most likely the set values for the specified id are wrong
         console.dir(err);
-        wpa_cli.reassociate('wlan0', function(err, data) {
-          console.dir(data);
-        });
-      }
-    });
-  );
+    } else {
+        // successfully connected to the new network
+        console.dir(data);
+    }
 });
+```
+## wpa_cli.scan(interface, callback)
+The **wpa_cli scan** is used to request a new BSS scan on a specific network interface.
 
+## wpa_cli.scan_results(interface, callback)
+The **wpa_cli scan_results** is used to return the results of the latest BSS scan
+ that was run on a specific network interface.
+ 
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+ 
+wpa_cli.scan('wlan0', function(err, data){
+    wpa_cli.scan_results('wlan0', function(err, data) {
+       // returns the results of the BSS scan once it completes
+       console.dir(data);
+    }
+});
+```
 
-// =>
-{
+``` javascript
+=>
+[
+ {
     bssid: '2c:f5:d3:02:ea:d9',
-    frequency: 2412,
-    mode: 'station',
-    key_mgmt: 'wpa2-psk',
-    ssid: 'Fake-Wifi',
-    pairwise_cipher: 'CCMP',
-    group_cipher: 'CCMP',
-    p2p_device_address: 'e4:28:9c:a8:53:72',
-    wpa_state: 'COMPLETED',
-    ip: '10.34.141.168',
-    mac: 'e4:28:9c:a8:53:72',
-    uuid: 'e1cda789-8c88-53e8-ffff-31c304580c1e',
-    id: 0
-}
-
-OK
-
-FAIL
-
-OK
-
+    frequency: 2472,
+    signalLevel: -31,
+    flags: '[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]',
+    ssid: 'FakeWifi'
+ },
+ {
+    bssid: '2c:f5:d3:02:ea:d9',
+    frequency: 2472,
+    signalLevel: -31,
+    flags: '[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]',
+    ssid: 'FakeWifi2'
+ }
+]
 ```
 
 # wpa_supplicant

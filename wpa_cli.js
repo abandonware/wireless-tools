@@ -190,7 +190,8 @@ function parse_command_interface(callback) {
 function parse_scan_results(block) {
     var match;
     var results = [];
-
+    var lines;
+    
     lines = block.split('\n').map(function(item) { return item + "\n"; });
     lines.forEach(function(entry){
         var parsed = {};
