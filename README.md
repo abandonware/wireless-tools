@@ -40,6 +40,9 @@
   - [wpa_cli.enable_network(interface, id, callback)](#wpa_clienable_networkinterface-id-callback) - enable network
   - [wpa_cli.disable_network(interface, id, callback)](#wpa_clidisable_networkinterface-id-callback) - disable network
   - [wpa_cli.remove_network(interface, id, callback)](#wpa_cliremove_networkinterface-id-callback) - disable network
+  - [wpa_cli.select_network(interface, id, callback)](#wpa_cliselect_networkinterface-id-callback) - select network
+  - [wpa_cli.scan(interface, callback)](#wpa_cliscaninterface-callback) - new BSS scan
+  - [wpa_cli.scan_results(interface, callback)](#wpa_cliscan_resultsinterface-callback) - results of latest BSS scan
 - [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
   - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
   - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
