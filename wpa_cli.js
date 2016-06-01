@@ -40,7 +40,10 @@ var wpa_cli = module.exports = {
     set_network: set_network,
     enable_network: enable_network,
     disable_network: disable_network,
-    remove_network: remove_network
+    remove_network: remove_network,
+    select_network: select_network,
+    scan: scan,
+    scan_results: scan_results
 };
 
 /**
@@ -171,6 +174,69 @@ function parse_command_interface(callback) {
             } else {
                 callback(error, parse_command_block(stdout.trim()));
             }
+        }
+    };
+}
+
+/**
+ * Parses the results of a scan_result request.
+ *
+ * @private
+ * @static
+ * @category wpa_cli
+ * @param {string} block The section of stdout for the interface.
+ * @returns {object} The parsed scan results.
+ */
+function parse_scan_results(block) {
+    var match;
+    var results = [];
+
+    lines = block.split('\n').map(function(item) { return item + "\n"; });
+    lines.forEach(function(entry){
+        var parsed = {};
+        if ((match = entry.match(/([A-Fa-f0-9:]{17})\t/))) {
+            parsed.bssid = match[1].toLowerCase();
+        }
+
+        if ((match = entry.match(/\t([\d]+)\t+/))) {
+            parsed.frequency = parseInt(match[1], 10);
+        }
+
+        if ((match = entry.match(/([-][0-9]+)\t/))) {
+            parsed.signalLevel = parseInt(match[1], 10);
+        }
+
+        if ((match = entry.match(/\t(\[.+\])\t/))) {
+            parsed.flags = match[1];
+        }
+
+        if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
+            parsed.ssid = match[1];
+        }
+
+        if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
+            results.push(parsed);
+        }
+    });
+
+    return results;
+}
+
+/**
+ * Parses the status for a scan_results request.
+ *
+ * @private
+ * @static
+ * @category wpa_cli
+ * @param {function} callback The callback function.
+ *
+ */
+function parse_scan_results_interface(callback) {
+    return function(error, stdout, stderr) {
+        if (error) {
+            callback(error);
+        } else {
+            callback(error, parse_scan_results(stdout.trim()));
         }
     };
 }
@@ -312,4 +378,29 @@ function remove_network(interface, id, callback) {
                  id ].join(' ');
 
     return this.exec(command, parse_command_interface(callback));
+}
+
+function select_network(interface, id, callback) {
+    var command = ['wpa_cli -i',
+        interface,
+        'select_network',
+        id ].join(' ');
+
+    return this.exec(command, parse_command_interface(callback));
+}
+
+function scan(interface, callback) {
+    var command = ['wpa_cli -i',
+        interface,
+        'scan'].join(' ');
+
+    return this.exec(command, parse_command_interface(callback));
+}
+
+function scan_results(interface, callback) {
+    var command = ['wpa_cli -i',
+        interface,
+        'scan_results'].join(' ');
+
+    return this.exec(command, parse_scan_results_interface(callback));
 }

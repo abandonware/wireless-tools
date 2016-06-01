@@ -66,6 +66,16 @@ var WPA_CLI_STATUS_SCANNING = [
     'uuid=e1cda789-8c88-53e8-ffff-31c304580c1e'
 ].join('\n');
 
+var WPA_CLI_SCAN_RESULTS = [
+    'bssid / frequency / signal level / flags / ssid',
+    '2c:f5:d3:02:ea:d9	2472	-31	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]	FakeWifi',
+    '2c:f5:d3:02:ea:d9	2472	-31	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]	FakeWifi2'
+].join('\n');
+
+var WPA_CLI_SCAN_NORESULTS = [
+    ''
+].join('\n');
+
 var WPA_CLI_COMMAND_OK = 'OK\n';
 var WPA_CLI_COMMAND_FAIL = 'FAIL\n';
 var WPA_CLI_COMMAND_ID = '0\n';
@@ -477,6 +487,130 @@ describe('wpa_cli', function() {
             };
 
             wpa_cli.remove_network('wlan0', 28, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.select_network(iface, id, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 select_network 0');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.select_network('wlan0', 0, function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 select_network 28');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.select_network('wlan0', 28, function(err, status) {
+                should(err.message).eql('FAIL');
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.select_network('wlan0', 28, function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.scan(iface, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 scan');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.scan('wlan0', function(err, scan) {
+                should(scan).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.scan('wlan0', function(err, scan) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
+
+    describe('wpa_cli.scan_results(iface, callback)', function(){
+        before(function() {
+            this.OUTPUT = '';
+            var self = this;
+
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 scan_results');
+                callback(null, self.OUTPUT);
+            };
+        });
+
+        it('scan_results NORESULTS', function (done) {
+            this.OUTPUT = WPA_CLI_SCAN_NORESULTS;
+
+            wpa_cli.scan_results('wlan0', function(err, results) {
+                should(results).eql([]);
+                done();
+            });
+        });
+
+        it('scan_results COMPLETED', function(done) {
+            this.OUTPUT = WPA_CLI_SCAN_RESULTS;
+            wpa_cli.scan_results('wlan0', function(err, results) {
+                should(results).eql([
+                    {
+                        bssid: '2c:f5:d3:02:ea:d9',
+                        frequency: 2472,
+                        signalLevel: -31,
+                        flags: '[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]',
+                        ssid: 'FakeWifi'
+                    },
+                    {
+                        bssid: '2c:f5:d3:02:ea:d9',
+                        frequency: 2472,
+                        signalLevel: -31,
+                        flags: '[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]',
+                        ssid: 'FakeWifi2'
+                    }
+                ]);
+
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.scan_results('wlan0', function(err, results) {
                 should(err).eql('error');
                 done();
             });
