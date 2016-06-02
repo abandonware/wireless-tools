@@ -38,5 +38,12 @@
     "mocha": "^2.5.3",
     "should": "^8.4.0",
     "xo": "^0.15.1"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Athom",
+      "email": "support@athom.com",
+      "url": "https://www.athom.com/en/"
+    }
+  ]
 }
