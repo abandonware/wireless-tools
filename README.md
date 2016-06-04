@@ -39,7 +39,7 @@
   - [wpa_cli.set_network(interface, id, variable, value, callback)](#wpa_cliset_networkinterface-id-variable-value-callback) - set network variables
   - [wpa_cli.enable_network(interface, id, callback)](#wpa_clienable_networkinterface-id-callback) - enable network
   - [wpa_cli.disable_network(interface, id, callback)](#wpa_clidisable_networkinterface-id-callback) - disable network
-  - [wpa_cli.remove_network(interface, id, callback)](#wpa_cliremove_networkinterface-id-callback) - disable network
+  - [wpa_cli.remove_network(interface, id, callback)](#wpa_cliremove_networkinterface-id-callback) - remove network
   - [wpa_cli.select_network(interface, id, callback)](#wpa_cliselect_networkinterface-id-callback) - select network
   - [wpa_cli.scan(interface, callback)](#wpa_cliscaninterface-callback) - new BSS scan
   - [wpa_cli.scan_results(interface, callback)](#wpa_cliscan_resultsinterface-callback) - results of latest BSS scan
@@ -440,7 +440,7 @@ Most of wpa_cli commands only return 'OK' or 'FAIL' (and exist status is always 
 'OK' result only means than wpa_supplicant had received the command. A polling must be done to wpa_supplicant (or using other tools like iwconfig) to be sure that the command was actually applied by wpa_supplicant.
 
 ## wpa_cli.status(interface, callback)
-The **wpa_cli status** is used to get the current status of wpa_supplicant on a specific network interface.
+The **wpa_cli status** command is used to get the current status of wpa_supplicant on a specific network interface.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
@@ -469,7 +469,7 @@ wpa_cli.status('wlan0', function(err, status) {
 }
 ```
 ## wpa_cli.bssid(interface, ap, ssid, callback)
-The **wpa_cli bssid** is used to set the preferred APs for an specific ssid on a specific network interface.
+The **wpa_cli bssid** command is used to set the preferred APs for an specific ssid on a specific network interface.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
@@ -480,7 +480,7 @@ wpa_cli.bssid('wlan0', '2c:f5:d3:02:ea:dd', 'Fake-Wifi', function(err, data){
 });
 ```
 ## wpa_cli.reassociate(interface, callback)
-The **wpa_cli reassociate** is used to instruct wpa_supplicant to reassociate to APs for a ssid on a specific network interface.
+The **wpa_cli reassociate** command is used to instruct wpa_supplicant to reassociate to APs for a ssid on a specific network interface.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
@@ -497,26 +497,26 @@ wpa_cli.bssid('wlan0', 'Fake-Wifi', '2c:f5:d3:02:ea:dd', function(err, data){
 });
 ```
 ## wpa_cli.set(interface, variable, value, callback)
-The **wpa_cli set** is used to set wpa_supplicant parameters to a value on a specific network interface.
+The **wpa_cli set** command is used to set wpa_supplicant parameters to a value on a specific network interface.
 
 ## wpa_cli.add_network(interface, callback)
-The **wpa_cli add_network** is used to create a new network entry on a specific network interface.
+The **wpa_cli add_network** command is used to create a new network entry on a specific network interface.
 It will return on success the id of the new network
 
 ## wpa_cli.set_network(interface, id, variable, value, callback)
-The **wpa_cli set_network** is used to set variables for a network on a specific network interface.
+The **wpa_cli set_network** command is used to set variables for a network on a specific network interface.
 
 ## wpa_cli.enable_network(interface, id, callback)
-The **wpa_cli enable_network** is used to enable a network on a specific network interface.
+The **wpa_cli enable_network** command is used to enable a network on a specific network interface.
 
 ## wpa_cli.disable_network(interface, id, callback)
-The **wpa_cli disable_network** is used to disable a network on a specific network interface.
+The **wpa_cli disable_network** command is used to disable a network on a specific network interface.
 
 ## wpa_cli.remove_network(interface, id, callback)
-The **wpa_cli remove_network** is used to remove a network on a specific network interface.
+The **wpa_cli remove_network** command is used to remove a network on a specific network interface.
 
 ## wpa_cli.select_network(interface, id, callback)
-The **wpa_cli select_network** is used to select a specific network on a specific network interface and
+The **wpa_cli select_network** command is used to select a specific network on a specific network interface and
 disable all others.
 
 ``` javascript
