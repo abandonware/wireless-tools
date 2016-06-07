@@ -603,7 +603,7 @@ wpa_supplicant.disable('wlan0', function(err) {
 ```
 
 ## wpa_supplicant.manual(options, callback)
-The **wpa_supplicant manual** command is used to taunch wpa_supplicant on a specific network interface.
+The **wpa_supplicant manual** command is used to launch wpa_supplicant on a specific network interface.
 
 ``` javascript
 var wpa_supplicant = require('wireless-tools/wpa_supplicant');
