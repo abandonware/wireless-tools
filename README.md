@@ -33,7 +33,7 @@
   - [wpa_cli.status(interface, callback)](#wpa_clistatusinterface-callback) - get status of wpa
   - [wpa_cli.bssid(interface, ap, ssid, callback)](#wpa_clibssidinterface-ap-ssid-callback) - set preferred bssid for ssid
   - [wpa_cli.reassociate(interface,
-    callback)](#wpa_clireassociateinterface-callback) - tell wpa_supplicant to reassociate to an APs
+    callback)](#wpa_clireassociateinterface-callback) - tell wpa_supplicant to reassociate to an access points
   - [wpa_cli.set(interface, variable, value, callback)](#wpa_clisetinterface-variable-value-callback) - set variable to value
   - [wpa_cli.add_network(interface, callback)](#wpa_cliadd_networkinterface-callback) - add network
   - [wpa_cli.set_network(interface, id, variable, value, callback)](#wpa_cliset_networkinterface-id-variable-value-callback) - set network variables
@@ -435,9 +435,11 @@ udhcpd.disable('wlan0', function(err) {
 # wpa_cli
 The **wpa_cli** command is used to setup what wpa_supplicant must do to connect to a wireless network connection for a network interface.
 
-Most of wpa_cli commands only return 'OK' or 'FAIL' (and exist status is always 0). I wrapped 'FAIL' so it will return and call callback with an error in such case.
+Most of wpa_cli commands return either 'OK' or 'FAIL' (and the exit status is
+always 0). Because of this, all 'FAIL' responses will return and callback with an error.
 
-'OK' result only means than wpa_supplicant had received the command. A polling must be done to wpa_supplicant (or using other tools like iwconfig) to be sure that the command was actually applied by wpa_supplicant.
+Responses containing an 'OK' result only means than wpa_supplicant had received
+the command. You must poll wpa_supplicant (or other commands like iwconfig) to be sure that the command was actually applied by wpa_supplicant.
 
 ## wpa_cli.status(interface, callback)
 The **wpa_cli status** command is used to get the current status of wpa_supplicant on a specific network interface.
@@ -469,7 +471,7 @@ wpa_cli.status('wlan0', function(err, status) {
 }
 ```
 ## wpa_cli.bssid(interface, ap, ssid, callback)
-The **wpa_cli bssid** command is used to set the preferred APs for an specific ssid on a specific network interface.
+The **wpa_cli bssid** command is used to set the preferred access points for an specific ssid on a specific network interface.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
@@ -480,7 +482,7 @@ wpa_cli.bssid('wlan0', '2c:f5:d3:02:ea:dd', 'Fake-Wifi', function(err, data){
 });
 ```
 ## wpa_cli.reassociate(interface, callback)
-The **wpa_cli reassociate** command is used to instruct wpa_supplicant to reassociate to APs for a ssid on a specific network interface.
+The **wpa_cli reassociate** command is used to instruct wpa_supplicant to reassociate to access points for an SSID on a specific network interface.
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
