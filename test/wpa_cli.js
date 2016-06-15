@@ -616,4 +616,45 @@ describe('wpa_cli', function() {
             });
         });
     });
+
+    describe('wpa_cli.save_config(iface, callback)', function(){
+        it('OK result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 save_config');
+                callback(null, WPA_CLI_COMMAND_OK);
+            };
+
+            wpa_cli.save_config('wlan0', function(err, status) {
+                should(status).eql({
+                    result: 'OK'
+                });
+
+                done();
+            });
+        });
+
+        it('FAIL result', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                should(command).eql('wpa_cli -i wlan0 save_config');
+                callback(null, WPA_CLI_COMMAND_FAIL);
+            };
+
+            wpa_cli.save_config('wlan0', function(err, status) {
+                should(err.message).eql('FAIL');
+
+                done();
+            });
+        });
+
+        it('should handle errors', function(done) {
+            wpa_cli.exec = function(command, callback) {
+                callback('error');
+            };
+
+            wpa_cli.scan('wlan0', function(err, status) {
+                should(err).eql('error');
+                done();
+            });
+        });
+    });
 });

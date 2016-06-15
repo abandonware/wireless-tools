@@ -43,7 +43,8 @@ var wpa_cli = module.exports = {
     remove_network: remove_network,
     select_network: select_network,
     scan: scan,
-    scan_results: scan_results
+    scan_results: scan_results,
+    save_config: save_config
 };
 
 /**
@@ -404,4 +405,12 @@ function scan_results(interface, callback) {
         'scan_results'].join(' ');
 
     return this.exec(command, parse_scan_results_interface(callback));
+}
+
+function save_config(interface, callback) {
+    var command = ['wpa_cli -i',
+        interface,
+        'save_config'].join(' ');
+
+    return this.exec(command, parse_command_interface(callback));
 }
