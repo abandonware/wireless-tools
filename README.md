@@ -43,6 +43,7 @@
   - [wpa_cli.select_network(interface, id, callback)](#wpa_cliselect_networkinterface-id-callback) - select network
   - [wpa_cli.scan(interface, callback)](#wpa_cliscaninterface-callback) - new BSS scan
   - [wpa_cli.scan_results(interface, callback)](#wpa_cliscan_resultsinterface-callback) - results of latest BSS scan
+  - [wpa_cli.save_config(interface, callback)](#wpa_clisave_configinterface-callback) - saves the current configuration
 - [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
   - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
   - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
@@ -570,6 +571,17 @@ wpa_cli.scan('wlan0', function(err, data){
     ssid: 'FakeWifi2'
  }
 ]
+```
+
+## wpa_cli.save_config(interface, callback)
+The **wpa_cli save_config** command is used to save the current wpa_cli configuration for the specific network interface.
+
+``` javascript
+var wpa_cli = require('wireless-tools/wpa_cli');
+ 
+wpa_cli.save_config('wlan0', function(err, data){
+    // current wpa_cli configuration is saved
+});
 ```
 
 # wpa_supplicant
