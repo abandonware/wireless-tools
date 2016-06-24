@@ -57,8 +57,8 @@ var wpa_supplicant = module.exports = {
  *
  */
 function disable(interface, callback) {
-  var command = 'kill `pgrep -f "wpa_supplicant .* -i ' +
-    interface + '"` || true';
+  var command = 'kill `pgrep -f "wpa_supplicant -i ' +
+    interface + ' .*"` || true';
 
   return this.exec(command, callback);
 }
@@ -99,7 +99,8 @@ function enable(options, callback) {
 }
 
 /**
- * launchs wpa manually (as if it were launched by ifup if interface wpa setup was done in /network/interfaces)
+ * launchs wpa manually (as if it were launched by ifup if interface wpa setup
+ * was done in /network/interfaces)
  * /sbin/wpa_supplicant -s -B -P /run/wpa_supplicant.wlan0.pid -i wlan0 -D nl80211,wext -C /run/wpa_supplicant
  * options = {
  *     interface: 'wlan0',
@@ -108,12 +109,10 @@ function enable(options, callback) {
  */
 function manual(options, callback) {
   var command = [
-    'wpa_supplicant -s -B -P',
-    [ '/run/wpa_supplicant/', options.interface, '.pid'].join(''),
-    '-i',
-    options.interface,
-    '-D',
-    options.drivers.join(),
+    'wpa_supplicant',
+    '-i', options.interface,
+    '-s -B -P /run/wpa_supplicant/' + options.interface + '.pid',
+    '-D', options.drivers.join(','),
     '-C /run/wpa_supplicant'
   ].join(' ');
 
