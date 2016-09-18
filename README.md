@@ -34,6 +34,14 @@
   - [wpa_cli.bssid(interface, ap, ssid, callback)](#wpa_clibssidinterface-ap-ssid-callback) - set preferred bssid for ssid
   - [wpa_cli.reassociate(interface,
     callback)](#wpa_clireassociateinterface-callback) - tell wpa_supplicant to reassociate to an access points
+  - [wpa_cli.reattach(interface,
+    callback)](#wpa_clireattachinterface-callback) - force reassociation back to the same BSS
+  - [wpa_cli.disconnect(interface,
+    callback)](#wpa_clidisconnectinterface-callback) - disconnect and wait for reassociate/reconnect command before connecting
+  - [wpa_cli.reconnect(interface,
+    callback)](#wpa_clireconnectinterface-callback) - like reassociate, but only takes effect if already disconnected
+  - [wpa_cli.reauthenticate(interface,
+    callback)](#wpa_clireauthenticateinterface-callback) - trigger IEEE 802.1X/EAPOL reauthentication
   - [wpa_cli.set(interface, variable, value, callback)](#wpa_clisetinterface-variable-value-callback) - set variable to value
   - [wpa_cli.add_network(interface, callback)](#wpa_cliadd_networkinterface-callback) - add network
   - [wpa_cli.set_network(interface, id, variable, value, callback)](#wpa_cliset_networkinterface-id-variable-value-callback) - set network variables
@@ -44,6 +52,8 @@
   - [wpa_cli.scan(interface, callback)](#wpa_cliscaninterface-callback) - new BSS scan
   - [wpa_cli.scan_results(interface, callback)](#wpa_cliscan_resultsinterface-callback) - results of latest BSS scan
   - [wpa_cli.save_config(interface, callback)](#wpa_clisave_configinterface-callback) - saves the current configuration
+  - [wpa_cli.flush(interface,
+    callback)](#wpa_cliflushinterface-callback) - flush wpa_supplicant state
 - [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
   - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
   - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
@@ -499,6 +509,18 @@ wpa_cli.bssid('wlan0', 'Fake-Wifi', '2c:f5:d3:02:ea:dd', function(err, data){
       }
 });
 ```
+## wpa_cli.reattach(interface, callback)
+The **wpa_cli reattach** command is used to force reassociation back to the same BSS on a specific network interface.
+
+## wpa_cli.disconnect(interface, callback)
+The **wpa_cli disconnect** command is used to disconnect and wait for reassociate/reconnect command before connecting on a specific network interface.
+
+## wpa_cli.reconnect(interface, callback)
+The **wpa_cli reconnect** command is used like reassociate, but only takes effect if already disconnected.
+
+## wpa_cli.reauthenticate(interface, callback)
+The **wpa_cli reauthenticate** command is used to trigger IEEE 802.1X/EAPOL reauthentication on a specific network interface.
+
 ## wpa_cli.set(interface, variable, value, callback)
 The **wpa_cli set** command is used to set wpa_supplicant parameters to a value on a specific network interface.
 
@@ -541,10 +563,10 @@ The **wpa_cli scan** is used to request a new BSS scan on a specific network int
 ## wpa_cli.scan_results(interface, callback)
 The **wpa_cli scan_results** is used to return the results of the latest BSS scan
  that was run on a specific network interface.
- 
+
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
- 
+
 wpa_cli.scan('wlan0', function(err, data){
     wpa_cli.scan_results('wlan0', function(err, data) {
        // returns the results of the BSS scan once it completes
@@ -578,11 +600,14 @@ The **wpa_cli save_config** command is used to save the current wpa_cli configur
 
 ``` javascript
 var wpa_cli = require('wireless-tools/wpa_cli');
- 
+
 wpa_cli.save_config('wlan0', function(err, data){
     // current wpa_cli configuration is saved
 });
 ```
+
+## wpa_cli.flush(interface, callback)
+The **wpa_cli flush** command is used to flush wpa_supplicant state on a specific network interface.
 
 # wpa_supplicant
 The **wpa_supplicant** command is used to configure a wireless network connection for a network interface.
