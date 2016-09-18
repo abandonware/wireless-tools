@@ -53,7 +53,7 @@ function buildCommand(commandName, interface, args) {
 
 function exportCommand(commandName) {
     module.exports[commandName] = function(interface, callback) {
-        var command = getCommand(commandName, interface, [])
+        var command = getCommand(commandName, interface, []);
 
         return this.exec(command, parse_command_interface(callback));
     }
