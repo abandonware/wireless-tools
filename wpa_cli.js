@@ -369,7 +369,7 @@ function set_network(interface, id, variable, value, callback) {
                  'set_network',
                  id,
                  variable,
-                 value ].join(' ');
+                 '"'+value+'"' ].join(' ');
 
     return this.exec(command, parse_command_interface(callback));
 }
