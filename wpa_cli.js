@@ -192,7 +192,7 @@ function parse_scan_results(block) {
     var match;
     var results = [];
     var lines;
-    
+
     lines = block.split('\n').map(function(item) { return item + "\n"; });
     lines.forEach(function(entry){
         var parsed = {};
@@ -350,7 +350,7 @@ function set_network(interface, id, variable, value, callback) {
                  'set_network',
                  id,
                  variable,
-                 value ].join(' ');
+                 '"'+value+'"' ].join(' ');
 
     return this.exec(command, parse_command_interface(callback));
 }
