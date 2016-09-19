@@ -346,7 +346,7 @@ function add_network(interface, callback) {
 
 function set_network(interface, id, variable, value, callback) {
     if (typeof value === 'string') {
-        value = '\"'+value+'\"'
+        value = '\\"'+value+'\\"'
     }
 
     var command = ['wpa_cli -i',
