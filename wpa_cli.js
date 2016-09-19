@@ -192,7 +192,7 @@ function parse_scan_results(block) {
     var match;
     var results = [];
     var lines;
-    
+
     lines = block.split('\n').map(function(item) { return item + "\n"; });
     lines.forEach(function(entry){
         var parsed = {};
@@ -345,6 +345,10 @@ function add_network(interface, callback) {
 }
 
 function set_network(interface, id, variable, value, callback) {
+    if (typeof value === 'string') {
+        value = '\"'+value+'\"'
+    }
+
     var command = ['wpa_cli -i',
                  interface,
                  'set_network',
