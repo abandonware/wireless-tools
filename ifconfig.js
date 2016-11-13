@@ -51,7 +51,7 @@ function parse_status_block(block) {
   var match;
 
   var parsed = {
-    interface: block.match(/^([^\s]+)/)[1]
+    interface: block.match(/^([^\s]+)/)[1].replace(':','')
   };
 
   if ((match = block.match(/Link encap:\s*([^\s]+)/))) {
