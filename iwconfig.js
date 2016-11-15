@@ -91,7 +91,7 @@ function parse_status_block(block) {
     parsed.ssid = match[1];
   }
 
-  if ((match = block.match(/unassociated/))) {
+  if ((match = block.match(/Not-Associated/))) {
     parsed.unassociated = true;
   }
 
