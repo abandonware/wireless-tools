@@ -126,6 +126,8 @@ function parse_status(callback) {
  */
 function parse_status_interface(callback) {
   return function(error, stdout, stderr) {
+    console.log('parse status interface:')
+    console.log('stderr')
     if (error) callback(error);
     else callback(error, parse_status_block(stdout.trim()));
   };
