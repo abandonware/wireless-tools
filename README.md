@@ -32,8 +32,7 @@
 - [wpa_cli](#wpa_cli) - send commands to wpa_supplicant using wpa_cli
   - [wpa_cli.status(interface, callback)](#wpa_clistatusinterface-callback) - get status of wpa
   - [wpa_cli.bssid(interface, ap, ssid, callback)](#wpa_clibssidinterface-ap-ssid-callback) - set preferred bssid for ssid
-  - [wpa_cli.reassociate(interface,
-    callback)](#wpa_clireassociateinterface-callback) - tell wpa_supplicant to reassociate to an access points
+  - [wpa_cli.reassociate(interface, callback)](#wpa_clireassociateinterface-callback) - tell wpa_supplicant to reassociate to an access points
   - [wpa_cli.set(interface, variable, value, callback)](#wpa_clisetinterface-variable-value-callback) - set variable to value
   - [wpa_cli.add_network(interface, callback)](#wpa_cliadd_networkinterface-callback) - add network
   - [wpa_cli.set_network(interface, id, variable, value, callback)](#wpa_cliset_networkinterface-id-variable-value-callback) - set network variables
@@ -47,8 +46,9 @@
 - [wpa_supplicant](#wpa_supplicant) - configure a wireless network connection
   - [wpa_supplicant.enable(options, callback)](#wpa_supplicantenableoptions-callback) - connect to a wireless network
   - [wpa_supplicant.disable(interface, callback)](#wpa_supplicantdisableinterface-callback) - disconnect from a wireless network
-  - [wpa_supplicant.manual(options,
-    callback)](#wpa_supplicantmanualoptions-callback) - start wpa_supplicant in a way it can receive commands from wpa_cli
+  - [wpa_supplicant.manual(options, callback)](#wpa_supplicantmanualoptions-callback) - start wpa_supplicant in a way it can receive commands from wpa_cli
+- [iw](#iw) - get and set parameters using `iw`, the interface for nl80211 interfaces
+  - [iw.scan(options, callback)](#iwscaninterface-callback) - scan for wireless networks
 
 # hostapd
 The **hostapd** command is used to configure wireless access points.
@@ -630,4 +630,109 @@ var options = {
 wpa_supplicant.manual(options, function(err) {
   // wpa_supplicant launched on wlan0 interface (can be setup using wpa_cli)
 });
+```
+
+# iw
+The **iw** command is used to get and set detailed information from an nl80211 wireless interface.
+
+## iw.scan(interface, callback)
+The **iw scan** command is used to scan for wireless networks visible to a wireless interface. For convenience, the networks are sorted by signal strength.
+
+``` javascript
+var iw = require('wireless-tools/iw');
+
+iw.scan('wlan0', function(err, networks) {
+  console.log(networks);
+});
+
+iw.scan({ iface : 'wlan0', show_hidden : true }, function(err, networks) {
+  console.log(networks);
+});
+
+// =>
+[
+  {
+    address: '00:0b:81:ab:14:22',
+    frequency: 2422,
+    signal: -80,
+    lastSeenMs: 0,
+    ssid: 'BlueberryPi',
+    channel: 3,
+    security: 'wpa'
+  },
+  {
+    address: '00:0b:81:95:12:21',
+    frequency: 5825,
+    signal: -83,
+    lastSeenMs: 2031,
+    ssid: 'RaspberryPi',
+    channel: 165,
+    security: 'wpa2'
+  },
+  {
+    address: '00:0b:81:cd:f2:04',
+    frequency: 2437,
+    signal: -88,
+    lastSeenMs: 0,
+    ssid: 'BlackberryPi',
+    channel: 6,
+    security: 'wep'
+  },
+  {
+    address: '00:0b:81:fd:42:14',
+    frequency: 2412,
+    signal: -92,
+    lastSeenMs: 0,
+    ssid: 'CranberryPi',
+    channel: 1,
+    security: 'open'
+  }
+]
+
+[
+  {
+    address: '00:0b:81:ab:14:22',
+    frequency: 2422,
+    signal: -80,
+    lastSeenMs: 0,
+    ssid: 'BlueberryPi',
+    channel: 3,
+    security: 'wpa'
+  },
+  {
+    address: '00:0b:81:95:12:21',
+    frequency: 5825,
+    signal: -83,
+    lastSeenMs: 2031,
+    ssid: 'RaspberryPi',
+    channel: 165,
+    security: 'wpa2'
+  },
+  {
+    address: '00:0b:81:cd:f2:04',
+    frequency: 2437,
+    signal: -88,
+    lastSeenMs: 0,
+    ssid: 'BlackberryPi',
+    channel: 6,
+    security: 'wep'
+  },
+  {
+    address: '00:0b:81:fd:42:14',
+    frequency: 2412,
+    signal: -92,
+    lastSeenMs: 0,
+    ssid: 'CranberryPi',
+    channel: 1,
+    security: 'open'
+  },
+  {
+    address: '00:0b:81:fd:42:01',
+    frequency: 2412,
+    signal: -94,
+    lastSeenMs: 1069,
+    channel: 1,
+    security: 'open'
+  }
+]
 ```
