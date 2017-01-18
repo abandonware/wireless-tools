@@ -13,6 +13,7 @@
     "ifconfig",
     "iwconfig",
     "iwlist",
+    "iw",
     "udhcpc",
     "udhcpd",
     "wpa_supplicant"
@@ -44,6 +45,11 @@
       "name": "Athom",
       "email": "support@athom.com",
       "url": "https://www.athom.com/en/"
+    },
+    {
+      "name": "Wink",
+      "email": "support@wink.com",
+      "url": "https://www.wink.com/"
     }
   ]
 }
