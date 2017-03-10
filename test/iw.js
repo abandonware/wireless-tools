@@ -846,6 +846,73 @@ describe('iw', function() {
       });
     })
 
+    it('should scan the specified interface using sudo', function(done) {
+      iw.exec = function(command, callback) {
+        should(command).eql('sudo iw dev wlan0 scan');
+        callback(null, IW_SCAN_LINUX, '');
+      };
+
+      var options = {
+        iface: 'wlan0',
+        sudo: true
+      };
+
+      iw.scan(options, function(err, status) {
+        should(status).eql([
+          { frequency: 5260,
+            address: "f4:0f:1b:b5:5b:4d",
+            signal: -59,
+            lastSeenMs: 4530,
+            ssid: 'Wink-Visitor',
+            channel: 52,
+            security: 'wpa' },
+          { frequency: 5260,
+            address: "f4:0f:1b:b5:5b:4e",
+            signal: -59,
+            lastSeenMs: 4530,
+            ssid: 'Flex-Visitor',
+            channel: 52,
+            security: 'open' },
+          { frequency: 2437,
+            address: "2c:30:33:ec:4b:24",
+            signal: -68,
+            lastSeenMs: 0,
+            ssid: 'NETGEAR03',
+            channel: 6,
+            security: 'wpa2' },
+          { frequency: 5180,
+            address: "6c:70:9f:e7:d8:b3",
+            signal: -77,
+            lastSeenMs: 2110,
+            ssid: 'QA Lab 5GHz',
+            channel: 36,
+            security: 'wpa2' },
+          { frequency: 2412,
+            address: "7c:0e:ce:b7:d7:90",
+            signal: -77,
+            lastSeenMs: 10,
+            ssid: 'Flex-Skynet',
+            channel: 1,
+            security: 'wpa2' },
+          { frequency: 2412,
+            address: "14:91:82:c7:76:b9",
+            signal: -87,
+            lastSeenMs: 0,
+            ssid: 'creamcorn',
+            channel: 1,
+            security: 'wpa2' },
+          { frequency: 2457,
+            address: "14:91:82:bd:15:61",
+            signal: -88,
+            lastSeenMs: 1070,
+            ssid: 'beast10',
+            channel: 10,
+            security: 'wep' },
+        ]);
+        done();
+      });
+    })
+
     it('should handle errors', function(done) {
       iw.exec = function(command, callback) {
         callback('error');

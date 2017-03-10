@@ -179,14 +179,16 @@ function parse_scan(show_hidden, callback) {
  * @param {function} callback The callback function.
  */
 function scan(options, callback) {
-  var interface, show_hidden
+  var interface, show_hidden, sudo
   if (typeof options === 'string') {
     var interface = options;
     var show_hidden = false;
+    var sudo = false;
   } else {
     var interface = options.iface;
     var show_hidden = options.show_hidden || false;
+    var sudo = options.sudo || false;
   }
 
-  this.exec('iw dev ' + interface + ' scan', parse_scan(show_hidden, callback));
+  this.exec((sudo ? 'sudo ' : '') + 'iw dev ' + interface + ' scan', parse_scan(show_hidden, callback));
 }

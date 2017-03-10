@@ -146,6 +146,24 @@ describe('ifconfig', function() {
       });
     })
 
+    it('should take down the interface using sudo', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('sudo ifconfig wlan0 down');
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        sudo: true
+      };
+
+      ifconfig.down(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+
     it('should handle errors', function(done) {
       ifconfig.exec = function(command, callback) {
         callback('error');
@@ -172,6 +190,28 @@ describe('ifconfig', function() {
         ipv4_address: '192.168.10.1',
         ipv4_broadcast: '192.168.10.255',
         ipv4_subnet_mask: '255.255.255.0'
+      };
+
+      ifconfig.up(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should bring up the interface using sudo', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('sudo ifconfig wlan0 192.168.10.1' +
+          ' netmask 255.255.255.0 broadcast 192.168.10.255 up');
+
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        ipv4_address: '192.168.10.1',
+        ipv4_broadcast: '192.168.10.255',
+        ipv4_subnet_mask: '255.255.255.0',
+        sudo: true
       };
 
       ifconfig.up(options, function(err) {
