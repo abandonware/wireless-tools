@@ -76,27 +76,7 @@ describe('wpa_supplicant', function() {
       });
     })
 
-    it('should handle errors', function(done) {
-      wpa_supplicant.exec = function(command, callback) {
-        callback('error');
-      };
-
-      var options = {
-        interface: 'wlan0',
-        ssid: 'RaspberryPi',
-        passphrase: 'raspberry',
-        driver: 'wext'
-      };
-
-      wpa_supplicant.enable(options, function(err) {
-        should(err).eql('error');
-        done();
-      });
-    })
-  })
-
-  describe('wpa_supplicant.enable(options, callback)', function() {
-    it('should start the daemon using key_mgmt=NONE', function(done) {
+    it('should start the daemon using open wifi network', function(done) {
       wpa_supplicant.exec = function(command, callback) {
         should(command).eql("printf 'network={ \n\tssid=\"RaspberryPi\"\n\tkey_mgmt=NONE\n}\n'" +
           ' > wlan0-wpa_supplicant.conf &&' +
@@ -126,6 +106,7 @@ describe('wpa_supplicant', function() {
       var options = {
         interface: 'wlan0',
         ssid: 'RaspberryPi',
+        passphrase: 'raspberry',
         driver: 'wext'
       };
 
