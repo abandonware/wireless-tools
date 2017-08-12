@@ -192,9 +192,13 @@ function parse_scan_results(block) {
     var match;
     var results = [];
     var lines;
-    
+
+    console.log(block+'XX');
     lines = block.split('\n').map(function(item) { return item + "\n"; });
+console.log(lines);
+
     lines.forEach(function(entry){
+      console.log('entry',entry.replace('\n','')+'<');
         var parsed = {};
         if ((match = entry.match(/([A-Fa-f0-9:]{17})\t/))) {
             parsed.bssid = match[1].toLowerCase();
@@ -208,12 +212,13 @@ function parse_scan_results(block) {
             parsed.signalLevel = parseInt(match[1], 10);
         }
 
-        if ((match = entry.match(/\t(\[.+\])\t/))) {
+        if ((match = entry.match(/\t(\[.+\])\t?/))) {
             parsed.flags = match[1];
         }
 
         if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
             parsed.ssid = match[1];
+            console.log('parsed.ssid',parsed.ssid);
         }
 
         if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
@@ -238,7 +243,7 @@ function parse_scan_results_interface(callback) {
         if (error) {
             callback(error);
         } else {
-            callback(error, parse_scan_results(stdout.trim()));
+            callback(error, parse_scan_results(stdout));
         }
     };
 }
