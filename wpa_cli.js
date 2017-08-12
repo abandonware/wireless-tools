@@ -193,12 +193,8 @@ function parse_scan_results(block) {
     var results = [];
     var lines;
 
-    console.log(block+'XX');
     lines = block.split('\n').map(function(item) { return item + "\n"; });
-console.log(lines);
-
     lines.forEach(function(entry){
-      console.log('entry',entry.replace('\n','')+'<');
         var parsed = {};
         if ((match = entry.match(/([A-Fa-f0-9:]{17})\t/))) {
             parsed.bssid = match[1].toLowerCase();
@@ -218,7 +214,6 @@ console.log(lines);
 
         if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
             parsed.ssid = match[1];
-            console.log('parsed.ssid',parsed.ssid);
         }
 
         if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
