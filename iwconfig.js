@@ -111,7 +111,7 @@ function parse_status(callback) {
   return function(error, stdout, stderr) {
     if (error) callback(error);
     else callback(error,
-      stdout.trim().split('\n\n').map(parse_status_block).filter(function(i) { return !! i }));
+      stdout.trim().replace(/ {10,}/g, '').split('\n\n').map(parse_status_block).filter(function(i) { return !! i }));
   };
 }
 
