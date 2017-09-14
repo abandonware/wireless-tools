@@ -51,30 +51,51 @@ function parse_status_block(block) {
   var match;
 
   var parsed = {
-    interface: block.match(/^([^\s]+)/)[1]
+    interface: block.match(/^([^\s^\:]+)/)[1]
   };
 
   if ((match = block.match(/Link encap:\s*([^\s]+)/))) {
+    parsed.link = match[1].toLowerCase();
+  }
+  if (!parsed.link && (match = block.match(/ether[^\(]*\(([^\s]+)\)/))) {
+    parsed.link = match[1].toLowerCase();
+  }
+  if (!parsed.link && (match = block.match(/loop[^\(]*\(([^\s]+)/))) {
     parsed.link = match[1].toLowerCase();
   }
 
   if ((match = block.match(/HWaddr\s+([^\s]+)/))) {
     parsed.address = match[1].toLowerCase();
   }
+  if (!parsed.address && (match = block.match(/ether\s*([^\s]+)/))) {
+    parsed.address = match[1].toLowerCase();
+  }
 
   if ((match = block.match(/inet6\s+addr:\s*([^\s]+)/))) {
+    parsed.ipv6_address = match[1];
+  }
+  if (!parsed.ipv6_address && (match = block.match(/inet6\s+([^\s]+)/))) {
     parsed.ipv6_address = match[1];
   }
 
   if ((match = block.match(/inet\s+addr:\s*([^\s]+)/))) {
     parsed.ipv4_address = match[1];
   }
+  if (!parsed.ipv4_address && (match = block.match(/inet\s+([^\s]+)/))) {
+    parsed.ipv4_address = match[1];
+  }
 
   if ((match = block.match(/Bcast:\s*([^\s]+)/))) {
     parsed.ipv4_broadcast = match[1];
   }
+  if (!parsed.ipv4_broadcast && (match = block.match(/broadcast\s*([^\s]+)/))) {
+    parsed.ipv4_broadcast = match[1];
+  }
 
   if ((match = block.match(/Mask:\s*([^\s]+)/))) {
+    parsed.ipv4_subnet_mask = match[1];
+  }
+  if (!parsed.ipv4_subnet_mask && (match = block.match(/netmask\s*([^\s]+)/))) {
     parsed.ipv4_subnet_mask = match[1];
   }
 
