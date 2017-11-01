@@ -179,6 +179,10 @@ function parse_command_interface(callback) {
     };
 }
 
+function decodeUtf8(string) {
+  return Buffer.from(string, 'ascii').toString('utf8');
+}
+
 /**
  * Parses the results of a scan_result request.
  *
@@ -192,7 +196,7 @@ function parse_scan_results(block) {
     var match;
     var results = [];
     var lines;
-    
+
     lines = block.split('\n').map(function(item) { return item + "\n"; });
     lines.forEach(function(entry){
         var parsed = {};
@@ -213,7 +217,7 @@ function parse_scan_results(block) {
         }
 
         if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
-            parsed.ssid = match[1];
+            parsed.ssid = decodeUtf8(match[1]);
         }
 
         if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
