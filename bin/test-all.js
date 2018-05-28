@@ -26,7 +26,7 @@ async function test(platform) {
     const dockerfile = path.join(dockerfiles, platform, 'Dockerfile');
 
     await exec(`docker build -t wt:${platform} -f ${dockerfile} ${context}`);
-    await exec(`docker run wt:${platform}`);
+    await exec(`docker run --rm wt:${platform}`);
   } catch (err) {
     console.error(`Error when testing platform: ${platform}`);
     console.error(err.stdout);
