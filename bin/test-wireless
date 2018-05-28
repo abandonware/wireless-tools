@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const exec = require('../src/exec');
+const which = require('../src/which');
+const UnsupportedPlatformError = require('../src/unsupported-platform-error');
+
+const context = path.resolve(__dirname, '..');
+
+async function main(platform) {
+  const docker = await which('docker');
+
+  if (!docker) {
+    throw new UnsupportedPlatformError('Unable to find docker executable in path');
+  }
+
+  if (!platform) {
+    throw new TypeError('You must specify a platform to test');
+  }
+
+  await exec(`docker build -t wt:${platform} -f dockerfiles/${platform}/Dockerfile ${context}`);
+  return exec(`docker run wt:${platform}`);
+}
+
+main(...process.argv.slice(2))
+  .then(res => {
+    console.log(res.stdout);
+    process.exit(0);
+  })
+  .catch(err => {
+    console.error(err.stack);
+    console.error(err.stderr);
+    console.error(err.stdout);
+
+    process.exit(1);
+  });

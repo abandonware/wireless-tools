@@ -1,55 +1,38 @@
 {
   "name": "wireless-tools",
-  "version": "0.19.0",
+  "version": "1.0.0",
   "description": "Wireless tools for Node.js",
-  "author": "Christopher M. Baker",
+  "author": "Chris Baker <mail.chris.baker@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/bakerface/wireless-tools",
-  "main": "wireless-tools.js",
+  "main": "index.js",
+  "homepage": "https://github.com/bakerface/wireless-tools#readme",
   "keywords": [
     "wireless",
-    "tools",
-    "hostapd",
-    "ifconfig",
-    "iwconfig",
-    "iwlist",
-    "iw",
-    "udhcpc",
-    "udhcpd",
-    "wpa_supplicant"
+    "tools"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bakerface/wireless-tools.git"
+    "url": "git+https://github.com/bakerface/wireless-tools.git"
   },
   "bugs": {
     "url": "https://github.com/bakerface/wireless-tools/issues"
   },
   "scripts": {
-    "test": "istanbul cover node_modules/.bin/_mocha",
-    "posttest": "istanbul check-coverage --statements 100 --functions 100 --branches 100 --lines 100",
-    "codeclimate": "codeclimate-test-reporter < coverage/lcov.info"
+    "test": "xo && mocha"
   },
   "xo": {
-    "space": true
+    "space": true,
+    "prettier": true,
+    "extends": [
+      "xo"
+    ],
+    "env": [
+      "mocha",
+      "node"
+    ]
   },
   "devDependencies": {
-    "codeclimate-test-reporter": "^0.3.1",
-    "istanbul": "^0.4.3",
-    "mocha": "^2.5.3",
-    "should": "^9.0.2",
-    "xo": "^0.16.0"
-  },
-  "contributors": [
-    {
-      "name": "Athom",
-      "email": "support@athom.com",
-      "url": "https://www.athom.com/en/"
-    },
-    {
-      "name": "Wink",
-      "email": "support@wink.com",
-      "url": "https://www.wink.com/"
-    }
-  ]
+    "mocha": "^5.2.0",
+    "xo": "^0.21.1"
+  }
 }
