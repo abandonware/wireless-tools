@@ -75,6 +75,7 @@ const parse = ({stdout}) =>
 
 exports.exists = () => which('ifconfig');
 
-exports.status = async () => {
-  return parse(await exec('ifconfig'));
+exports.status = async name => {
+  const all = parse(await exec('ifconfig'));
+  return name ? all[name] : all;
 };

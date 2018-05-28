@@ -1,9 +1,9 @@
 const ifconfig = require('./ifconfig');
 const UnsupportedPlatformError = require('./unsupported-platform-error');
 
-module.exports = async () => {
+module.exports = async name => {
   if (await ifconfig.exists()) {
-    return ifconfig.status();
+    return ifconfig.status(name);
   }
 
   throw new UnsupportedPlatformError(

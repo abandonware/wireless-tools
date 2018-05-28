@@ -23,4 +23,17 @@ describe('wireless.status([name])', () => {
       }
     });
   });
+
+  it('can get status of a single interface', async () => {
+    const status = await wireless.status('eth0');
+
+    assert.deepEqual(status, {
+      flags: {
+        broadcast: true,
+        multicast: true,
+        running: true,
+        up: true
+      }
+    });
+  });
 });
