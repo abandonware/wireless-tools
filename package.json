@@ -18,7 +18,8 @@
     "url": "https://github.com/bakerface/wireless-tools/issues"
   },
   "scripts": {
-    "test": "xo && mocha"
+    "test": "xo && mocha",
+    "test:all": "node bin/test-all.js"
   },
   "xo": {
     "space": true,
