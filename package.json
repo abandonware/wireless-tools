@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "xo && mocha",
-    "test:all": "node bin/test-all.js"
+    "test:docker": "node bin/test-all.js"
   },
   "xo": {
     "space": true,
