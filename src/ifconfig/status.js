@@ -25,8 +25,11 @@ const flags = [
   'POINTOPOINT',
   'PREFERRED',
   'PRIVATE',
+  'PROMISC',
   'ROUTER',
   'RUNNING',
+  'SIMPLEX',
+  'SMART',
   'STANDBY',
   'TEMPORARY',
   'UNNUMBERED',
@@ -57,8 +60,17 @@ function parseIp(section) {
 function parseMask(section) {
   const netmask = section.match(/netmask ([^\s]+)/);
   const mask = section.match(/Mask:([^\s]+)/);
+  const value = (netmask && netmask[1]) || (mask && mask[1]);
 
-  return (netmask && netmask[1]) || (mask && mask[1]);
+  if (value && value.slice(0, 2) === '0x') {
+    return value
+      .slice(2)
+      .match(/\w\w/g)
+      .map(n => parseInt(n, 16))
+      .join('.');
+  }
+
+  return value;
 }
 
 function parseBroadcast(section) {
@@ -115,11 +127,25 @@ function parseSection(target, section) {
   return target;
 }
 
-const parse = ({stdout}) =>
-  stdout
-    .trim()
-    .split(/\n\n/g)
-    .reduce(parseSection, []);
+function parseLine(target, line) {
+  const section = target.pop();
+
+  if (/^\s/.test(line)) {
+    target.push(`${section}\n${line}`);
+  } else {
+    target.push(section);
+    target.push(line);
+  }
+
+  return target;
+}
+
+function parse({stdout}) {
+  const lines = stdout.trim().split(/\n/g);
+  const sections = lines.reduce(parseLine, ['']);
+
+  return sections.reduce(parseSection, []);
+}
 
 module.exports = async (options = {}) => {
   const run = options.exec || exec;
