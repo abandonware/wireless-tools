@@ -172,16 +172,17 @@ ifconfig.down('wlan0', function(err) {
 ```
 
 ## ifconfig.up(options, callback)
-The **ifconfig up** command is used to bring up an interface with the specified configuration.
+The **ifconfig up** command is used to bring up an interface with an optional specified
+configuration.
 
 ``` javascript
 var ifconfig = require('wireless-tools/ifconfig');
 
 var options = {
   interface: 'wlan0',
-  ipv4_address: '192.168.10.1',
-  ipv4_broadcast: '192.168.10.255',
-  ipv4_subnet_mask: '255.255.255.0'
+  ipv4_address(optional): '192.168.10.1',
+  ipv4_broadcast(optional): '192.168.10.255',
+  ipv4_subnet_mask(optional): '255.255.255.0'
 };
 
 ifconfig.up(options, function(err) {

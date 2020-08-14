@@ -161,6 +161,23 @@ describe('ifconfig', function() {
   describe('ifconfig.up(options, callback)', function() {
     it('should bring up the interface', function(done) {
       ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig wlan0 up');
+
+        callback(null, '', '');
+      };
+
+      var minimal_options = {
+        interface: 'wlan0'
+      };
+
+      ifconfig.up(minimal_options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should bring up and configure the ip settings for the interface', function(done) {
+      ifconfig.exec = function(command, callback) {
         should(command).eql('ifconfig wlan0 192.168.10.1' +
           ' netmask 255.255.255.0 broadcast 192.168.10.255 up');
 

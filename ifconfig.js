@@ -230,9 +230,9 @@ function down(interface, callback) {
  *
  * var options = {
  *   interface: 'wlan0',
- *   ipv4_address: '192.168.10.1',
- *   ipv4_broadcast: '192.168.10.255',
- *   ipv4_subnet_mask: '255.255.255.0'
+ *   ipv4_address(optional): '192.168.10.1',
+ *   ipv4_broadcast(optional): '192.168.10.255',
+ *   ipv4_subnet_mask(optional): '255.255.255.0'
  * };
  *
  * ifconfig.up(options, function(err) {
@@ -242,8 +242,8 @@ function down(interface, callback) {
  */
 function up(options, callback) {
   return this.exec('ifconfig ' + options.interface +
-    ' ' + options.ipv4_address +
-    ' netmask ' + options.ipv4_subnet_mask +
-    ' broadcast ' + options.ipv4_broadcast +
+    ((options['ipv4_address'] && (' ' + options['ipv4_address'])) || '') +
+    ((options['ipv4_subnet_mask'] && (' netmask ' + options['ipv4_subnet_mask'])) || '') +
+    ((options['ipv4_broadcast'] && (' broadcast ' + options['ipv4_broadcast'])) || '') +
     ' up', callback);
 }
