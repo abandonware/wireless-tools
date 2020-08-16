@@ -242,8 +242,8 @@ function down(interface, callback) {
  */
 function up(options, callback) {
   return this.exec('ifconfig ' + options.interface +
-    ((options['ipv4_address'] && (' ' + options['ipv4_address'])) || '') +
-    ((options['ipv4_subnet_mask'] && (' netmask ' + options['ipv4_subnet_mask'])) || '') +
-    ((options['ipv4_broadcast'] && (' broadcast ' + options['ipv4_broadcast'])) || '') +
+    ((options.ipv4_address && (' ' + options.ipv4_address)) || '') +
+    ((options.ipv4_subnet_mask && (' netmask ' + options.ipv4_subnet_mask)) || '') +
+    ((options.ipv4_broadcast && (' broadcast ' + options.ipv4_broadcast)) || '') +
     ' up', callback);
 }
