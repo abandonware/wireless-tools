@@ -187,12 +187,12 @@ function parse_status_interface(callback) {
  * ]
  *
  */
-function status(interface, callback) {
+function status(interface_, callback) {
   if (callback) {
-    this.exec('ifconfig ' + interface, parse_status_interface(callback));  
+    this.exec('ifconfig ' + interface_, parse_status_interface(callback));  
   }
   else {
-    this.exec('ifconfig -a', parse_status(interface));  
+    this.exec('ifconfig -a', parse_status(interface_));  
   }
 }
 
@@ -213,8 +213,8 @@ function status(interface, callback) {
  * });
  *
  */
-function down(interface, callback) {
-  return this.exec('ifconfig ' + interface + ' down', callback);
+function down(interface_, callback) {
+  return this.exec('ifconfig ' + interface_ + ' down', callback);
 }
 
 /**

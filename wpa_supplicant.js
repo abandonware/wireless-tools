@@ -56,9 +56,9 @@ var wpa_supplicant = module.exports = {
  * });
  *
  */
-function disable(interface, callback) {
+function disable(interface_, callback) {
   var command = 'kill `pgrep -f "wpa_supplicant -i ' +
-    interface + ' .*"` || true';
+    interface_ + ' .*"` || true';
 
   return this.exec(command, callback);
 }

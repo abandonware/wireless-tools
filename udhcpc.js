@@ -55,8 +55,8 @@ var udhcpc = module.exports = {
  * });
  *
  */
-function disable(interface, callback) {
-  var command = 'kill `pgrep -f "^udhcpc -i ' + interface + '"` || true';
+function disable(interface_, callback) {
+  var command = 'kill `pgrep -f "^udhcpc -i ' + interface_ + '"` || true';
   return this.exec(command, callback);
 }
 
