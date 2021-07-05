@@ -22,6 +22,7 @@
  */
 
 var child_process = require('child_process');
+var camelCase = require('lodash/camelCase');
 
 /**
  * The **wpa_cli** command is used to configure wpa network interfaces.
@@ -189,37 +190,26 @@ function parse_command_interface(callback) {
  * @returns {object} The parsed scan results.
  */
 function parse_scan_results(block) {
-    var match;
+    var keys;
     var results = [];
     var lines;
     
-    lines = block.split('\n').map(function(item) { return item + "\n"; });
-    lines.forEach(function(entry){
-        var parsed = {};
-        if ((match = entry.match(/([A-Fa-f0-9:]{17})\t/))) {
-            parsed.bssid = match[1].toLowerCase();
+    lines = block.split('\n').map(function(item) { return item; });
+    lines.reduce((results, entry, lineNo) => {
+        if (lineNo === 0) {
+            keys = entry.split(' / ');
+        } else {
+            var result = {};
+            var values = entry.split('\t');
+            keys.forEach(function(key, i){
+                var intValue = parseInt(values[i]);
+                var value = intValue == values[i] ? intValue : values[i]
+                result[camelCase(key)] = value || ''
+            })
+            results.push(result);
         }
-
-        if ((match = entry.match(/\t([\d]+)\t+/))) {
-            parsed.frequency = parseInt(match[1], 10);
-        }
-
-        if ((match = entry.match(/([-][0-9]+)\t/))) {
-            parsed.signalLevel = parseInt(match[1], 10);
-        }
-
-        if ((match = entry.match(/\t(\[.+\])\t/))) {
-            parsed.flags = match[1];
-        }
-
-        if ((match = entry.match(/\t([^\t]{1,32}(?=\n))/))) {
-            parsed.ssid = match[1];
-        }
-
-        if(!(Object.keys(parsed).length === 0 && parsed.constructor === Object)){
-            results.push(parsed);
-        }
-    });
+        return results
+    }, results)
 
     return results;
 }
