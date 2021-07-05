@@ -238,7 +238,7 @@ function parse_scan_results_interface(callback) {
         if (error) {
             callback(error);
         } else {
-            callback(error, parse_scan_results(stdout.trim()));
+            callback(error, parse_scan_results(stdout));
         }
     };
 }
