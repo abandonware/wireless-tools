@@ -9,6 +9,11 @@
 [![dev dependencies](https://david-dm.org/bakerface/wireless-tools/dev-status.svg)](https://david-dm.org/bakerface/wireless-tools#info=devDependencies)
 [![downloads](http://img.shields.io/npm/dm/wireless-tools.svg)](https://www.npmjs.com/package/wireless-tools)
 
+
+# Looking for a maintainer
+If you are interested in becoming a maintainer for this project, please let me know. I created this project many years ago and no longer have time to dedicate to moving it forward. I will not be accepting pull requests or responding to issues, sorry for the inconvenience.
+
+
 ## Table of Contents
 - [hostapd](#hostapd) - configure an access point
   - [hostapd.enable(options, callback)](#hostapdenableoptions-callback) - host an access point
