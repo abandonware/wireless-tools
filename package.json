@@ -51,5 +51,8 @@
       "email": "support@wink.com",
       "url": "https://www.wink.com/"
     }
-  ]
+  ],
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
