@@ -51,30 +51,30 @@ function parse_status_block(block) {
   var match;
 
   var parsed = {
-    interface: block.match(/^([^\s]+)/)[1]
+    interface: block.match(/^([\w|\d]+)/)[1]
   };
 
   if ((match = block.match(/Link encap:\s*([^\s]+)/))) {
     parsed.link = match[1].toLowerCase();
   }
 
-  if ((match = block.match(/HWaddr\s+([^\s]+)/))) {
+  if ((match = block.match(/ether\s*([\w|\d|:]+)/))) {
     parsed.address = match[1].toLowerCase();
   }
 
-  if ((match = block.match(/inet6\s+addr:\s*([^\s]+)/))) {
+  if ((match = block.match(/inet6\s*([\w|\d|:]+)/))) {
     parsed.ipv6_address = match[1];
   }
 
-  if ((match = block.match(/inet\s+addr:\s*([^\s]+)/))) {
+  if ((match = block.match(/inet\s+([\d|\.]+)/))) {
     parsed.ipv4_address = match[1];
   }
 
-  if ((match = block.match(/Bcast:\s*([^\s]+)/))) {
+  if ((match = block.match(/broadcast\s+([\d|\.]+)/))) {
     parsed.ipv4_broadcast = match[1];
   }
 
-  if ((match = block.match(/Mask:\s*([^\s]+)/))) {
+  if ((match = block.match(/netmask\s+([\d|\.]+)/))) {
     parsed.ipv4_subnet_mask = match[1];
   }
 
