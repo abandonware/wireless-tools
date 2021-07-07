@@ -140,7 +140,7 @@ function enable(options, callback) {
  * });
  *
  */
-function disable(interface, callback) {
-  var file = interface + '-udhcpd.conf';
+function disable(interface_, callback) {
+  var file = interface_ + '-udhcpd.conf';
   return this.exec('kill `pgrep -f "^udhcpd ' + file + '"` || true', callback);
 }

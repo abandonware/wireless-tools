@@ -291,12 +291,12 @@ function parse_scan(show_hidden, callback) {
  *
  */
 function scan(options, callback) {
-  var interface, show_hidden
+  var interface_, show_hidden
   if (typeof options === 'string') {
-    var interface = options;
+    var interface_ = options;
     var show_hidden = false;
   } else {
-    var interface = options.iface;
+    var interface_ = options.iface;
     var show_hidden = options.show_hidden || false;
   }
 
@@ -306,5 +306,5 @@ function scan(options, callback) {
     extra_params = ' essid ' + options.ssid;
   }
 
-  this.exec('iwlist ' + interface + ' scan' + extra_params, parse_scan(show_hidden, callback));
+  this.exec('iwlist ' + interface_ + ' scan' + extra_params, parse_scan(show_hidden, callback));
 }

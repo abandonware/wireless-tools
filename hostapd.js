@@ -54,8 +54,8 @@ var hostapd = module.exports = {
  * });
  *
  */
-function disable(interface, callback) {
-  var file = interface + '-hostapd.conf';
+function disable(interface_, callback) {
+  var file = interface_ + '-hostapd.conf';
 
   return this.exec('kill `pgrep -f "^hostapd -B ' + file + '"` || true',
     callback);
