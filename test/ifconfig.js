@@ -42,6 +42,26 @@ var IFCONFIG_STATUS_LINUX = [
   '          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)'
 ].join('\n');
 
+var IFCONFIG_STATUS_DEB10 = [
+  'eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500',
+  '        inet 192.168.1.2  netmask 255.255.255.0  broadcast 192.168.1.255',
+  '        inet6 aaaa::bbbb:cccc:dddd:eeee  prefixlen 64  scopeid 0x20<link>',
+  '        ether de:ad:be:ef:c0:de  txqueuelen 1000  (Ethernet)',
+  '        RX packets 5193248  bytes 1610332767 (1.4 GiB)',
+  '        RX errors 0  dropped 0  overruns 0  frame 0',
+  '        TX packets 3637642  bytes 930475115 (887.3 MiB)',
+  '        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0',
+  '',
+  'lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536',
+  '        inet 127.0.0.1  netmask 255.0.0.0',
+  '        inet6 ::1  prefixlen 128  scopeid 0x10<host>',
+  '        loop  txqueuelen 1000  (Local Loopback)',
+  '        RX packets 20293362  bytes 6288135659 (5.8 GiB)',
+  '        RX errors 0  dropped 0  overruns 0  frame 0',
+  '        TX packets 20293362  bytes 6288135659 (5.8 GiB)',
+  '        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0'
+].join('\n');
+
 var IFCONFIG_STATUS_INTERFACE_LINUX = [
   'wlan0     HWaddr DE:AD:BE:EF:C0:DE',
   '          inet6 addr:fe80::21c:c0ff:feae:b5e6/64 Scope:Link',
@@ -81,6 +101,41 @@ describe('ifconfig', function() {
             link: 'local',
             ipv4_address: '127.0.0.1',
             ipv4_subnet_mask: '255.0.0.0',
+            up: true,
+            loopback: true,
+            running: true
+          }
+        ]);
+
+        done();
+      });
+    })
+
+    it('should get the status for each interface (debian10)', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig -a');
+        callback(null, IFCONFIG_STATUS_DEB10, '');
+      };
+
+      ifconfig.status(function(err, status) {
+        should(status).eql([
+          {
+            interface: 'eth0',
+            address: 'de:ad:be:ef:c0:de',
+            ipv4_address: '192.168.1.2',
+            ipv4_broadcast: '192.168.1.255',
+            ipv4_subnet_mask: '255.255.255.0',
+            ipv6_address: 'aaaa::bbbb:cccc:dddd:eeee',
+            up: true,
+            broadcast: true,
+            running: true,
+            multicast: true
+          },
+          {
+            interface: 'lo',
+            ipv4_address: '127.0.0.1',
+            ipv4_subnet_mask: '255.0.0.0',
+            ipv6_address: '::1',
             up: true,
             loopback: true,
             running: true
