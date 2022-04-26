@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bakerface/wireless-tools.git"
+    "url": "git+https://github.com/bakerface/wireless-tools.git"
   },
   "bugs": {
     "url": "https://github.com/bakerface/wireless-tools/issues"
@@ -34,22 +34,17 @@
     "space": true
   },
   "devDependencies": {
-    "codeclimate-test-reporter": "^0.3.1",
+    "codeclimate-test-reporter": "0.5.1",
     "istanbul": "^0.4.3",
-    "mocha": "^2.5.3",
+    "mocha": "9.0.3",
     "should": "^9.0.2",
-    "xo": "^0.16.0"
+    "xo": "0.44.0"
   },
   "contributors": [
-    {
-      "name": "Athom",
-      "email": "support@athom.com",
-      "url": "https://www.athom.com/en/"
-    },
-    {
-      "name": "Wink",
-      "email": "support@wink.com",
-      "url": "https://www.wink.com/"
-    }
-  ]
+    "Athom <support@athom.com> (https://www.athom.com/en/)",
+    "Wink <support@wink.com> (https://www.wink.com/)"
+  ],
+  "directories": {
+    "test": "test"
+  }
 }
