@@ -192,7 +192,7 @@ function parse_scan_results(block) {
     var match;
     var results = [];
     var lines;
-    
+
     lines = block.split('\n').map(function(item) { return item + "\n"; });
     lines.forEach(function(entry){
         var parsed = {};
@@ -208,7 +208,7 @@ function parse_scan_results(block) {
             parsed.signalLevel = parseInt(match[1], 10);
         }
 
-        if ((match = entry.match(/\t(\[.+\])\t/))) {
+        if ((match = entry.match(/\t(\[.+\])\t?/))) {
             parsed.flags = match[1];
         }
 
@@ -238,7 +238,7 @@ function parse_scan_results_interface(callback) {
         if (error) {
             callback(error);
         } else {
-            callback(error, parse_scan_results(stdout.trim()));
+            callback(error, parse_scan_results(stdout));
         }
     };
 }
