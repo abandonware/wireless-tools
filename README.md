@@ -596,7 +596,7 @@ var wpa_supplicant = require('wireless-tools/wpa_supplicant');
 var options = {
   interface: 'wlan0',
   ssid: 'RaspberryPi',
-  passphrase: 'raspberry',
+  passphrase: 'raspberry', //optional for open networks
   driver: 'wext'
 };
 

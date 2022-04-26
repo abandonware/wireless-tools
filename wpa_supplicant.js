@@ -91,9 +91,15 @@ function disable(interface, callback) {
 function enable(options, callback) {
   var file = options.interface + '-wpa_supplicant.conf';
 
-  var command = 'wpa_passphrase "' + options.ssid + '" "' + options.passphrase
-    + '" > ' + file + ' && wpa_supplicant -i ' + options.interface + ' -B -D '
-    + options.driver + ' -c ' + file + ' && rm -f ' + file;
+  if(options.passphrase) {
+    var command = 'wpa_passphrase "' + options.ssid + '" "' + options.passphrase
+      + '" > ' + file + ' && wpa_supplicant -i ' + options.interface + ' -B -D '
+      + options.driver + ' -c ' + file + ' && rm -f ' + file;
+  } else {
+    var command = "printf 'network={ \n" + "\tssid=\""+ options.ssid + "\"\n"
+      + "\tkey_mgmt=NONE\n" + "}\n' > " + file + ' && wpa_supplicant -i '
+      + options.interface + ' -B -D ' + options.driver + ' -c ' + file + ' && rm -f ' + file;
+  }
 
   return this.exec(command, callback);
 }
