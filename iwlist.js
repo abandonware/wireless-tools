@@ -189,7 +189,7 @@ function parse_scan(show_hidden, callback) {
  *   console.log(networks);
  * });
  *
- * iwlist.scan({ iface : 'wlan0', show_hidden: true }, function(err, networks) {
+ * iwlist.scan({ iface : 'wlan0', show_hidden: true, sudo : true }, function(err, networks) {
  *   console.log(networks);
  * });
  *
@@ -291,13 +291,15 @@ function parse_scan(show_hidden, callback) {
  *
  */
 function scan(options, callback) {
-  var interface, show_hidden
+  var interface, show_hidden, sudo
   if (typeof options === 'string') {
     var interface = options;
     var show_hidden = false;
+    var sudo = false;
   } else {
     var interface = options.iface;
     var show_hidden = options.show_hidden || false;
+    var sudo = options.sudo || false;
   }
 
   var extra_params = '';
@@ -306,5 +308,5 @@ function scan(options, callback) {
     extra_params = ' essid ' + options.ssid;
   }
 
-  this.exec('iwlist ' + interface + ' scan' + extra_params, parse_scan(show_hidden, callback));
+  this.exec((sudo ? 'sudo ' : '') + 'iwlist ' + interface + ' scan' + extra_params, parse_scan(show_hidden, callback));
 }

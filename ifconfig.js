@@ -212,9 +212,21 @@ function status(interface, callback) {
  *   // the interface is down
  * });
  *
+ * ifconfig.down({interface: 'wlan0', sudo: true}, function(err) {
+ *   // the interface is down
+ * });
  */
-function down(interface, callback) {
-  return this.exec('ifconfig ' + interface + ' down', callback);
+function down(options, callback) {
+ var interface, sudo
+ if(typeof options === 'string') {
+   var interface = options;
+   var sudo = false;
+ } else {
+   var interface = options.interface;
+   var sudo = options.sudo || false;
+ }
+
+ return this.exec((sudo ? 'sudo ' : '') + 'ifconfig ' + interface + ' down', callback);
 }
 
 /**
@@ -232,7 +244,8 @@ function down(interface, callback) {
  *   interface: 'wlan0',
  *   ipv4_address: '192.168.10.1',
  *   ipv4_broadcast: '192.168.10.255',
- *   ipv4_subnet_mask: '255.255.255.0'
+ *   ipv4_subnet_mask: '255.255.255.0',
+ *   sudo: true
  * };
  *
  * ifconfig.up(options, function(err) {
@@ -241,7 +254,9 @@ function down(interface, callback) {
  *
  */
 function up(options, callback) {
-  return this.exec('ifconfig ' + options.interface +
+  var sudo = options.sudo || false;
+  
+  return this.exec((sudo ? 'sudo ' : '') + 'ifconfig ' + options.interface +
     ' ' + options.ipv4_address +
     ' netmask ' + options.ipv4_subnet_mask +
     ' broadcast ' + options.ipv4_broadcast +

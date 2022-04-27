@@ -53,11 +53,23 @@ var hostapd = module.exports = {
  *   // no longer hosting the access point
  * });
  *
+ * hostapd.disable({interface: 'wlan0', sudo: true}, function(err) {
+ *   // no longer hosting the access point
+ * });
  */
-function disable(interface, callback) {
+function disable(options, callback) {
+  var interface, sudo
+  if(typeof options === 'string') {
+    var interface = options;
+    var sudo = false;
+  } else {
+    var interface = options.interface;
+    var sudo = options.sudo || false;
+  }
+
   var file = interface + '-hostapd.conf';
 
-  return this.exec('kill `pgrep -f "^hostapd -B ' + file + '"` || true',
+  return this.exec((sudo ? 'sudo ' : '') + 'kill `pgrep -f "^hostapd -B ' + file + '"` || true',
     callback);
 }
 
@@ -81,7 +93,8 @@ function disable(interface, callback) {
  *   interface: 'wlan0',
  *   ssid: 'RaspberryPi',
  *   wpa: 2,
- *   wpa_passphrase: 'raspberry'
+ *   wpa_passphrase: 'raspberry',
+ *   sudo: true
  * };
  *
  * hostapd.enable(options, function(err) {
@@ -91,13 +104,14 @@ function disable(interface, callback) {
  */
 function enable(options, callback) {
   var file = options.interface + '-hostapd.conf';
+  var sudo = options.sudo || false;
 
   var commands = [
-    'cat <<EOF >' + file + ' && hostapd -B ' + file + ' && rm -f ' + file
+    'cat <<EOF >' + file + ' && ' + (sudo ? 'sudo ' : '') + 'hostapd -B ' + file + ' && rm -f ' + file
   ];
 
   Object.getOwnPropertyNames(options).forEach(function(key) {
-    commands.push(key + '=' + options[key]);
+    if(key!='sudo') commands.push(key + '=' + options[key]);
   });
 
   return this.exec(commands.join('\n'), callback);

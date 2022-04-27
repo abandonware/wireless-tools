@@ -354,6 +354,69 @@ describe('iwlist', function() {
       });
     })
 
+     it('should scan the specified interface using sudo', function(done) {
+      iwlist.exec = function(command, callback) {
+        should(command).eql('sudo iwlist wlan0 scan');
+        callback(null, IWLIST_SCAN_LINUX, '');
+      };
+
+      var options = {
+        iface: 'wlan0',
+        sudo: true
+      };
+      
+      iwlist.scan(options, function(err, status) {
+        should(status).eql([
+          {
+            address: '00:0b:81:ab:14:22',
+            ssid: 'BlueberryPi',
+            mode: 'master',
+            frequency: 2.437,
+            channel: 6,
+            security: 'wpa',
+            quality: 48,
+            signal: 87
+          },
+          {
+            address: '00:0b:81:95:12:21',
+            ssid: 'RaspberryPi',
+            mode: 'master',
+            frequency: 2.437,
+            channel: 6,
+            security: 'wpa2',
+            quality: 58,
+            signal: 83
+          },
+          {
+            address: '00:0b:81:cd:f2:04',
+            ssid: 'BlackberryPi',
+            mode: 'master',
+            frequency: 2.437,
+            channel: 6,
+            security: 'wep',
+            quality: 48,
+            signal: 80
+          },
+          {
+            address: '00:0b:81:fd:42:14',
+            ssid: 'CranberryPi',
+            mode: 'master',
+            frequency: 2.437,
+            channel: 6,
+            security: 'open',
+            quality: 4,
+            signal: -60,
+            noise: -92
+          }
+        ]);
+
+        done();
+      });
+    })
+
+
+
+
     it('should handle errors', function(done) {
       iwlist.exec = function(command, callback) {
         callback('error');

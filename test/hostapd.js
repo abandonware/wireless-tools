@@ -39,6 +39,41 @@ describe('hostapd', function() {
       });
     })
 
+    it('should stop the daemons using sudo', function(done) {
+      hostapd.exec = function(command, callback) {
+        should(command).eql(
+          'sudo kill `pgrep -f "^hostapd -B wlan0-hostapd.conf"` || true');
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        sudo: true
+      };
+
+      hostapd.disable(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should stop the daemons using options without sudo', function(done) {
+      hostapd.exec = function(command, callback) {
+        should(command).eql(
+          'kill `pgrep -f "^hostapd -B wlan0-hostapd.conf"` || true');
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0'
+      };
+
+      hostapd.disable(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
     it('should handle errors', function(done) {
       hostapd.exec = function(command, callback) {
         callback('error');
@@ -76,6 +111,39 @@ describe('hostapd', function() {
         ssid: 'RaspberryPi',
         wpa: 2,
         wpa_passphrase: 'raspberry'
+      };
+
+      hostapd.enable(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should start the daemon using sudo', function(done) {
+      hostapd.exec = function(command, callback) {
+        should(command).eql('cat <<EOF >wlan0-hostapd.conf' +
+          ' && sudo hostapd -B wlan0-hostapd.conf' +
+          ' && rm -f wlan0-hostapd.conf\n' +
+          'channel=6\n' +
+          'driver=rtl871xdrv\n' +
+          'hw_mode=g\n' +
+          'interface=wlan0\n' +
+          'ssid=RaspberryPi\n' +
+          'wpa=2\n' +
+          'wpa_passphrase=raspberry');
+
+        callback(null, '', '');
+      };
+
+      var options = {
+        channel: 6,
+        driver: 'rtl871xdrv',
+        hw_mode: 'g',
+        interface: 'wlan0',
+        ssid: 'RaspberryPi',
+        wpa: 2,
+        wpa_passphrase: 'raspberry',
+        sudo: true
       };
 
       hostapd.enable(options, function(err) {

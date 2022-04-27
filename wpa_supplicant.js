@@ -55,9 +55,25 @@ var wpa_supplicant = module.exports = {
  *   // disconnected from wireless network
  * });
  *
+ * var options = {
+ *   interface: 'wlan0',
+ *   sudo: true
+ * };
+ * wpa_supplicant.disable(options, function(err) {
+ *   // disconnected from wireless network
+ * });
  */
-function disable(interface, callback) {
-  var command = 'kill `pgrep -f "wpa_supplicant -i ' +
+function disable(options, callback) {
+  var interface, sudo
+  if(typeof options === 'string') {
+    var interface = options;
+    var sudo = false;
+  } else {
+    var interface = options.interface;
+    var sudo = options.sudo || false;
+  }
+  
+  var command = (sudo ? 'sudo ' : '') + 'kill `pgrep -f "wpa_supplicant -i ' +
     interface + ' .*"` || true';
 
   return this.exec(command, callback);
@@ -80,7 +96,8 @@ function disable(interface, callback) {
  *   interface: 'wlan0',
  *   ssid: 'RaspberryPi',
  *   passphrase: 'raspberry',
- *   driver: 'wext'
+ *   driver: 'wext',
+ *   sudo: true
  * };
  *
  * wpa_supplicant.enable(options, function(err) {
@@ -93,11 +110,11 @@ function enable(options, callback) {
 
   if(options.passphrase) {
     var command = 'wpa_passphrase "' + options.ssid + '" "' + options.passphrase
-      + '" > ' + file + ' && wpa_supplicant -i ' + options.interface + ' -B -D '
-      + options.driver + ' -c ' + file + ' && rm -f ' + file;
+      + '" > ' + file + ' && ' + (options.sudo ? 'sudo ' : '') + 'wpa_supplicant -i ' 
+      + options.interface + ' -B -D ' + options.driver + ' -c ' + file + ' && rm -f ' + file;
   } else {
     var command = "printf 'network={ \n" + "\tssid=\""+ options.ssid + "\"\n"
-      + "\tkey_mgmt=NONE\n" + "}\n' > " + file + ' && wpa_supplicant -i '
+      + "\tkey_mgmt=NONE\n" + "}\n' > " + file + ' && ' + (options.sudo ? 'sudo ' : '') + 'wpa_supplicant -i '
       + options.interface + ' -B -D ' + options.driver + ' -c ' + file + ' && rm -f ' + file;
   }
 
@@ -110,12 +127,13 @@ function enable(options, callback) {
  * /sbin/wpa_supplicant -s -B -P /run/wpa_supplicant.wlan0.pid -i wlan0 -D nl80211,wext -C /run/wpa_supplicant
  * options = {
  *     interface: 'wlan0',
- *     drivers: [ 'nl80211', 'wext' ]
+ *     drivers: [ 'nl80211', 'wext' ],
+ *     sudo: true
  * }
  */
 function manual(options, callback) {
   var command = [
-    'wpa_supplicant',
+    (options.sudo ? 'sudo ' : '') + 'wpa_supplicant',
     '-i', options.interface,
     '-s -B -P /run/wpa_supplicant/' + options.interface + '.pid',
     '-D', options.drivers.join(','),
