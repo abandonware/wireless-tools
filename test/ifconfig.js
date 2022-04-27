@@ -235,6 +235,39 @@ describe('ifconfig', function() {
       });
     })
 
+    it('should bring up the interface without broadcast nor subnet', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig wlan0 192.168.10.1 up');
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0',
+        ipv4_address: '192.168.10.1',
+      };
+
+      ifconfig.up(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
+    it('should bring up the interface without ip/broadcast nor subnet', function(done) {
+      ifconfig.exec = function(command, callback) {
+        should(command).eql('ifconfig wlan0 0.0.0.0 up');
+        callback(null, '', '');
+      };
+
+      var options = {
+        interface: 'wlan0'
+      };
+
+      ifconfig.up(options, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    })
+
     it('should handle errors', function(done) {
       ifconfig.exec = function(command, callback) {
         callback('error');
