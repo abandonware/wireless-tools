@@ -63,6 +63,10 @@ function parse_status_block(block) {
     parsed.frequency = parseFloat(match[1]);
   }
 
+  if ((match = block.match(/Bit Rate[:|=]\s*([0-9\.]+)/))) {
+    parsed.bitrate = parseFloat(match[1]);
+  }
+
   if ((match = block.match(/IEEE\s*([^\s]+)/))) {
     parsed.ieee = match[1].toLowerCase();
   }

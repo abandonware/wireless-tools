@@ -91,6 +91,7 @@ describe('iwconfig', function() {
             ieee: '802.11bg',
             mode: 'master',
             frequency: 2.437,
+            bitrate: 54,
             sensitivity: 0,
             quality: 18,
             signal: 11,
@@ -142,6 +143,7 @@ describe('iwconfig', function() {
           ieee: '802.11bg',
           mode: 'master',
           frequency: 2.437,
+          bitrate: 54,
           sensitivity: 0,
           quality: 18,
           signal: 11,
@@ -179,6 +181,7 @@ describe('iwconfig', function() {
           ieee: '802.11abgn',
           mode: 'managed',
           frequency: 2.412,
+          bitrate: 36,
           quality: 63,
           signal: -47
         });
