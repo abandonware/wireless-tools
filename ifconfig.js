@@ -31,7 +31,7 @@ var child_process = require('child_process');
  *
  */
 var ifconfig = module.exports = {
-  exec: child_process.exec,
+  exec: child_process.execFile,
   status: status,
   down: down,
   up: up
@@ -198,11 +198,16 @@ function parse_status_interface(callback) {
  *
  */
 function status(interface, callback) {
+  var cmd = "";
   if (callback) {
-    this.exec('ifconfig ' + interface, parse_status_interface(callback));  
+    cmd = 'ifconfig ' + interface;
+    cmd = cmd.split(' ');
+    this.exec(cmd[0], cmd.slice(1), parse_status_interface(callback));  
   }
   else {
-    this.exec('ifconfig -a', parse_status(interface));  
+    cmd = 'ifconfig -a';
+    cmd = cmd.split(' ');
+    this.exec(cmd[0], cmd.slice(1), parse_status(interface));  
   }
 }
 
@@ -224,7 +229,9 @@ function status(interface, callback) {
  *
  */
 function down(interface, callback) {
-  return this.exec('ifconfig ' + interface + ' down', callback);
+  var cmd = 'ifconfig ' + interface + ' down';
+  cmd = cmd.split(' ');
+  return this.exec(cmd[0], cmd.slice(1), callback);
 }
 
 /**
@@ -251,9 +258,11 @@ function down(interface, callback) {
  *
  */
 function up(options, callback) {
-  return this.exec('ifconfig ' + options.interface +
-    ' ' + options.ipv4_address +
-    ' netmask ' + options.ipv4_subnet_mask +
-    ' broadcast ' + options.ipv4_broadcast +
-    ' up', callback);
+  var cmd = 'ifconfig ' + options.interface +
+  ' ' + options.ipv4_address +
+  ' netmask ' + options.ipv4_subnet_mask +
+  ' broadcast ' + options.ipv4_broadcast +
+  ' up', callback;
+  cmd = cmd.split(' ');
+  return this.exec(cmd[0], cmd.slice(1));
 }
