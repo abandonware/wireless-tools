@@ -179,14 +179,15 @@ function parse_scan(show_hidden, callback) {
  * @param {function} callback The callback function.
  */
 function scan(options, callback) {
-  var interface, show_hidden
+  var interface, show_hidden, exec_options
   if (typeof options === 'string') {
     var interface = options;
     var show_hidden = false;
   } else {
     var interface = options.iface;
     var show_hidden = options.show_hidden || false;
+    var exec_options = options.exec_options || {};
   }
 
-  this.exec('iw dev ' + interface + ' scan', parse_scan(show_hidden, callback));
+  this.exec('iw dev ' + interface + ' scan', exec_options, parse_scan(show_hidden, callback));
 }

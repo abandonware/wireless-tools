@@ -646,7 +646,7 @@ var IW_SCAN_LINUX = "BSS 14:91:82:c7:76:b9(on wlan0)\n" +
 describe('iw', function() {
   describe('iw.scan(interface, callback)', function() {
     it('should scan the specified interface', function(done) {
-      iw.exec = function(command, callback) {
+      iw.exec = function(command, exec_options, callback) {
         should(command).eql('iw dev wlan0 scan');
         callback(null, IW_SCAN_LINUX, '');
       };
@@ -708,7 +708,7 @@ describe('iw', function() {
     })
 
     it('should scan the specified interface and show hidden ssid networks', function(done) {
-      iw.exec = function(command, callback) {
+      iw.exec = function(command, exec_options, callback) {
         should(command).eql('iw dev wlan0 scan');
         callback(null, IW_SCAN_LINUX, '');
       };
@@ -781,7 +781,7 @@ describe('iw', function() {
     })
 
     it('should scan the specified interface and not show hidden ssid networks', function(done) {
-      iw.exec = function(command, callback) {
+      iw.exec = function(command, exec_options, callback) {
         should(command).eql('iw dev wlan0 scan');
         callback(null, IW_SCAN_LINUX, '');
       };
@@ -847,7 +847,7 @@ describe('iw', function() {
     })
 
     it('should handle errors', function(done) {
-      iw.exec = function(command, callback) {
+      iw.exec = function(command, exec_options, callback) {
         callback('error');
       };
 
